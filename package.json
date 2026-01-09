@@ -1,0 +1,58 @@
+{
+  "name": "telemaster-pro",
+  "version": "1.0.0",
+  "description": "Sistema de transmisión profesional para televisión y streaming",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js",
+    "client": "live-server --port=3000 --host=localhost",
+    "dev:all": "concurrently \"npm run dev\" \"npm run client\"",
+    "setup": "node scripts/setup.js",
+    "backup": "node scripts/backup.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo 'No build step required for Node.js backend'",
+    "lint": "eslint server/**/*.js src/js/**/*.js",
+    "format": "prettier --write \"**/*.{js,json,md,html,css}\""
+  },
+  "keywords": [
+    "broadcast",
+    "streaming",
+    "iptv",
+    "television",
+    "production",
+    "obs",
+    "vmix",
+    "replacement"
+  ],
+  "author": "Tu Nombre",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.13.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "fluent-ffmpeg": "^2.1.2",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "concurrently": "^8.2.0",
+    "live-server": "^1.2.2",
+    "eslint": "^8.44.0",
+    "prettier": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tu-usuario/teleMaster-pro.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tu-usuario/teleMaster-pro/issues"
+  },
+  "homepage": "https://github.com/tu-usuario/teleMaster-pro#readme"
+}

@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TeleMaster Pro - Sistema de Transmisión Profesional</title>
     <link rel="stylesheet" href="src/css/main.css">
-    <link rel="stylesheet" href="src/css/components.css">
-    <link rel="stylesheet" href="src/css/modals.css">
-    <link rel="stylesheet" href="src/css/responsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -135,53 +132,6 @@
                     
                     <div class="sources-list" id="videoSourcesList">
                         <!-- Fuentes de video dinámicas -->
-                        <div class="source-item video-source" data-source-id="cam1">
-                            <div class="source-icon">
-                                <i class="fas fa-camera"></i>
-                            </div>
-                            <div class="source-info">
-                                <div class="source-name">Cámara Estudio A</div>
-                                <div class="source-details">Blackmagic • 1080p50</div>
-                            </div>
-                            <div class="source-status live"></div>
-                            <div class="source-actions">
-                                <button class="action-btn" title="Configurar">
-                                    <i class="fas fa-cog"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="source-item video-source" data-source-id="cam2">
-                            <div class="source-icon">
-                                <i class="fas fa-camera"></i>
-                            </div>
-                            <div class="source-info">
-                                <div class="source-name">Cámara Estudio B</div>
-                                <div class="source-details">Blackmagic • 1080p50</div>
-                            </div>
-                            <div class="source-status live"></div>
-                            <div class="source-actions">
-                                <button class="action-btn" title="Configurar">
-                                    <i class="fas fa-cog"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="source-item video-source" data-source-id="ndi1">
-                            <div class="source-icon">
-                                <i class="fas fa-network-wired"></i>
-                            </div>
-                            <div class="source-info">
-                                <div class="source-name">PC Presentación</div>
-                                <div class="source-details">NDI • 1080p30</div>
-                            </div>
-                            <div class="source-status live"></div>
-                            <div class="source-actions">
-                                <button class="action-btn" title="Configurar">
-                                    <i class="fas fa-cog"></i>
-                                </button>
-                            </div>
-                        </div>
                     </div>
                     
                     <div class="sources-footer">
@@ -202,37 +152,6 @@
                     
                     <div class="sources-list" id="audioSourcesList">
                         <!-- Fuentes de audio dinámicas -->
-                        <div class="source-item audio-source" data-source-id="mic1">
-                            <div class="source-icon">
-                                <i class="fas fa-microphone"></i>
-                            </div>
-                            <div class="source-info">
-                                <div class="source-name">Micrófono Principal</div>
-                                <div class="source-details">XLR • Estéreo</div>
-                            </div>
-                            <div class="source-status live"></div>
-                            <div class="source-actions">
-                                <button class="action-btn" title="Configurar">
-                                    <i class="fas fa-cog"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="source-item audio-source" data-source-id="system">
-                            <div class="source-icon">
-                                <i class="fas fa-desktop"></i>
-                            </div>
-                            <div class="source-info">
-                                <div class="source-name">Audio de Sistema</div>
-                                <div class="source-details">Estéreo • 48kHz</div>
-                            </div>
-                            <div class="source-status live"></div>
-                            <div class="source-actions">
-                                <button class="action-btn" title="Configurar">
-                                    <i class="fas fa-cog"></i>
-                                </button>
-                            </div>
-                        </div>
                     </div>
                     
                     <div class="sources-footer">
@@ -243,197 +162,307 @@
                     </div>
                 </div>
                 
-                <!-- Más pestañas... -->
+                <!-- Pestaña de Gráficos -->
+                <div class="tab-content" id="graphics-sources">
+                    <div class="sources-header">
+                        <h3>Gráficos y Overlays</h3>
+                    </div>
+                    
+                    <div class="sources-list" id="graphicsSourcesList">
+                        <div class="source-item graphics-source" data-type="text">
+                            <div class="source-icon">
+                                <i class="fas fa-font"></i>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Texto</div>
+                                <div class="source-details">Overlay de texto</div>
+                            </div>
+                        </div>
+                        
+                        <div class="source-item graphics-source" data-type="image">
+                            <div class="source-icon">
+                                <i class="fas fa-image"></i>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Imagen</div>
+                                <div class="source-details">JPG, PNG, GIF</div>
+                            </div>
+                        </div>
+                        
+                        <div class="source-item graphics-source" data-type="lower-third">
+                            <div class="source-icon">
+                                <i class="fas fa-closed-captioning"></i>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Lower Third</div>
+                                <div class="source-details">Títulos inferiores</div>
+                            </div>
+                        </div>
+                        
+                        <div class="source-item graphics-source" data-type="countdown">
+                            <div class="source-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Cuenta Regresiva</div>
+                                <div class="source-details">Temporizador</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pestaña de Medios -->
+                <div class="tab-content" id="media-sources">
+                    <div class="sources-header">
+                        <h3>Archivos Multimedia</h3>
+                        <button class="icon-btn" id="btn-browse-media" title="Explorar archivos">
+                            <i class="fas fa-folder-open"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="sources-list" id="mediaSourcesList">
+                        <div class="source-item media-source" data-type="video">
+                            <div class="source-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Video Clip</div>
+                                <div class="source-details">MP4, MOV, AVI</div>
+                            </div>
+                        </div>
+                        
+                        <div class="source-item media-source" data-type="playlist">
+                            <div class="source-icon">
+                                <i class="fas fa-list"></i>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Lista de Reproducción</div>
+                                <div class="source-details">Videos secuenciales</div>
+                            </div>
+                        </div>
+                        
+                        <div class="source-item media-source" data-type="browser">
+                            <div class="source-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Navegador Web</div>
+                                <div class="source-details">Páginas web</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="media-browser">
+                        <input type="file" id="fileUpload" accept=".mp4,.mov,.avi,.jpg,.png,.gif" multiple style="display: none;">
+                        <button class="btn-add-source" id="btn-upload-media">
+                            <i class="fas fa-upload"></i>
+                            <span>Subir Archivos</span>
+                        </button>
+                    </div>
+                </div>
             </aside>
 
-            <!-- ÁREA CENTRAL - MULTIVISOR -->
+            <!-- ÁREA CENTRAL - EDITOR DE VIDEO -->
             <section class="main-area">
-                <!-- Barra de herramientas del multivisor -->
-                <div class="multiviewer-toolbar">
+                <!-- Herramientas del editor -->
+                <div class="editor-toolbar">
                     <div class="toolbar-left">
-                        <div class="layout-selector">
-                            <button class="layout-btn active" data-layout="2x2" title="2x2">
-                                <i class="fas fa-th"></i>
+                        <div class="tool-group">
+                            <button class="tool-btn active" data-tool="select" title="Seleccionar (V)">
+                                <i class="fas fa-mouse-pointer"></i>
                             </button>
-                            <button class="layout-btn" data-layout="1+3" title="1+3">
-                                <i class="fas fa-th-large"></i>
+                            <button class="tool-btn" data-tool="crop" title="Recortar (C)">
+                                <i class="fas fa-crop"></i>
                             </button>
-                            <button class="layout-btn" data-layout="1+1" title="1+1">
-                                <i class="fas fa-columns"></i>
+                            <button class="tool-btn" data-tool="transform" title="Transformar (T)">
+                                <i class="fas fa-expand-arrows-alt"></i>
                             </button>
-                            <button class="layout-btn" data-layout="full" title="Completo">
-                                <i class="fas fa-expand"></i>
+                            <button class="tool-btn" data-tool="text" title="Texto (A)">
+                                <i class="fas fa-font"></i>
                             </button>
                         </div>
                         
-                        <div class="multiviewer-controls">
-                            <button class="icon-btn" id="btn-snapshot" title="Capturar pantalla">
-                                <i class="fas fa-camera"></i>
+                        <div class="tool-group">
+                            <button class="tool-btn" id="btn-align-left" title="Alinear izquierda">
+                                <i class="fas fa-align-left"></i>
                             </button>
-                            <button class="icon-btn" id="btn-zoom" title="Zoom">
-                                <i class="fas fa-search"></i>
+                            <button class="tool-btn" id="btn-align-center" title="Alinear centro">
+                                <i class="fas fa-align-center"></i>
                             </button>
-                            <button class="icon-btn" id="btn-grid" title="Mostrar grid">
-                                <i class="fas fa-border-all"></i>
+                            <button class="tool-btn" id="btn-align-right" title="Alinear derecha">
+                                <i class="fas fa-align-right"></i>
+                            </button>
+                            <button class="tool-btn" id="btn-distribute" title="Distribuir">
+                                <i class="fas fa-th"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="toolbar-center">
+                        <div class="zoom-controls">
+                            <button class="icon-btn" id="btn-zoom-out" title="Alejar">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                            <select id="zoomLevel" class="zoom-select">
+                                <option value="0.25">25%</option>
+                                <option value="0.5">50%</option>
+                                <option value="0.75">75%</option>
+                                <option value="1" selected>100%</option>
+                                <option value="1.5">150%</option>
+                                <option value="2">200%</option>
+                                <option value="3">300%</option>
+                            </select>
+                            <button class="icon-btn" id="btn-zoom-in" title="Acercar">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button class="icon-btn" id="btn-fit-to-screen" title="Ajustar a pantalla">
+                                <i class="fas fa-expand"></i>
                             </button>
                         </div>
                     </div>
                     
                     <div class="toolbar-right">
-                        <div class="resolution-display">
-                            <i class="fas fa-expand-arrows-alt"></i>
-                            <span id="currentResolution">1920x1080</span>
-                        </div>
-                        
-                        <div class="fps-display">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <span id="currentFps">50</span>
-                            <span>fps</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Multivisor -->
-                <div class="multiviewer-container" id="multiviewer">
-                    <!-- Caja 1 - Program -->
-                    <div class="multiviewer-box program-box" data-box-id="program">
-                        <div class="box-header">
-                            <div class="box-label program">PROGRAM</div>
-                            <div class="box-controls">
-                                <button class="box-btn" title="Configurar">
-                                    <i class="fas fa-cog"></i>
-                                </button>
-                                <button class="box-btn" title="Alternar Tally">
-                                    <i class="fas fa-lightbulb"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="box-content">
-                            <div class="box-placeholder">
-                                <i class="fas fa-play-circle"></i>
-                                <span>Program</span>
-                            </div>
-                            <div class="box-source">Cámara Estudio A</div>
-                        </div>
-                        
-                        <div class="box-footer">
-                            <div class="box-tally program"></div>
-                            <div class="box-audio">
-                                <i class="fas fa-volume-up"></i>
-                                <div class="audio-meter">
-                                    <div class="audio-level" style="height: 60%;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Caja 2 - Preview -->
-                    <div class="multiviewer-box preview-box" data-box-id="preview">
-                        <div class="box-header">
-                            <div class="box-label preview">PREVIEW</div>
-                            <div class="box-controls">
-                                <button class="box-btn" title="Configurar">
-                                    <i class="fas fa-cog"></i>
-                                </button>
-                                <button class="box-btn" title="Alternar Tally">
-                                    <i class="fas fa-lightbulb"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="box-content">
-                            <div class="box-placeholder">
-                                <i class="fas fa-play-circle"></i>
-                                <span>Preview</span>
-                            </div>
-                            <div class="box-source">Cámara Estudio B</div>
-                        </div>
-                        
-                        <div class="box-footer">
-                            <div class="box-tally preview"></div>
-                            <div class="box-audio">
-                                <i class="fas fa-volume-up"></i>
-                                <div class="audio-meter">
-                                    <div class="audio-level" style="height: 40%;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Caja 3 - Multiview 1 -->
-                    <div class="multiviewer-box multiview-box" data-box-id="mv1">
-                        <div class="box-header">
-                            <div class="box-label multiview">MV 1</div>
-                        </div>
-                        
-                        <div class="box-content">
-                            <div class="box-placeholder">
-                                <i class="fas fa-eye"></i>
-                            </div>
-                            <div class="box-source">NDI Source</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Caja 4 - Multiview 2 -->
-                    <div class="multiviewer-box multiview-box" data-box-id="mv2">
-                        <div class="box-header">
-                            <div class="box-label multiview">MV 2</div>
-                        </div>
-                        
-                        <div class="box-content">
-                            <div class="box-placeholder">
-                                <i class="fas fa-eye"></i>
-                            </div>
-                            <div class="box-source">Media Player</div>
+                        <div class="snapping-controls">
+                            <button class="icon-btn active" id="btn-snapping" title="Snapping">
+                                <i class="fas fa-magnet"></i>
+                            </button>
+                            <button class="icon-btn" id="btn-grid-toggle" title="Mostrar grid">
+                                <i class="fas fa-border-all"></i>
+                            </button>
+                            <button class="icon-btn" id="btn-rulers" title="Mostrar reglas">
+                                <i class="fas fa-ruler-combined"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Controles de transición -->
-                <div class="transition-controls">
-                    <div class="transition-selector">
-                        <select id="transitionType" class="transition-select">
-                            <option value="cut">Corte</option>
-                            <option value="fade" selected>Fundido</option>
-                            <option value="slide">Deslizar</option>
-                            <option value="zoom">Zoom</option>
-                            <option value="wipe">Wipe</option>
-                            <option value="stinger">Stinger</option>
-                        </select>
+                <!-- Editor de video (como OBS) -->
+                <div class="video-editor-container">
+                    <!-- Canvas principal para video -->
+                    <div class="video-canvas" id="videoCanvas">
+                        <!-- Aquí se renderizan las fuentes de video -->
+                        <div class="canvas-overlay grid-overlay" id="gridOverlay"></div>
+                        <div class="canvas-overlay rulers-overlay" id="rulersOverlay"></div>
                         
-                        <div class="transition-duration">
-                            <label>Duración:</label>
-                            <input type="range" id="transitionDuration" min="0" max="5000" value="1000" step="100">
-                            <span id="durationValue">1.0s</span>
+                        <!-- Área de trabajo (como en OBS) -->
+                        <div class="workspace-area" id="workspace">
+                            <!-- Fuentes de video se agregan aquí dinámicamente -->
+                            <div class="video-source" id="source-template" style="display: none;">
+                                <div class="source-content"></div>
+                                <div class="source-controls">
+                                    <div class="resize-handle nw"></div>
+                                    <div class="resize-handle ne"></div>
+                                    <div class="resize-handle sw"></div>
+                                    <div class="resize-handle se"></div>
+                                    <div class="rotate-handle"></div>
+                                </div>
+                                <div class="source-info">
+                                    <span class="source-name"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Guías de seguridad -->
+                        <div class="safe-areas">
+                            <div class="safe-area action-safe"></div>
+                            <div class="safe-area title-safe"></div>
                         </div>
                     </div>
                     
-                    <div class="transition-buttons">
-                        <button class="transition-btn cut-btn" id="btn-cut" title="Corte (Espacio)">
-                            <i class="fas fa-bolt"></i>
-                            <span>CUT</span>
-                        </button>
+                    <!-- Controles del editor -->
+                    <div class="editor-controls">
+                        <div class="control-group">
+                            <label>Posición:</label>
+                            <div class="position-controls">
+                                <input type="number" id="posX" placeholder="X" min="0" max="1920">
+                                <input type="number" id="posY" placeholder="Y" min="0" max="1080">
+                            </div>
+                        </div>
                         
-                        <button class="transition-btn auto-btn" id="btn-auto" title="Transición automática (Enter)">
-                            <i class="fas fa-play"></i>
-                            <span>AUTO</span>
-                        </button>
+                        <div class="control-group">
+                            <label>Tamaño:</label>
+                            <div class="size-controls">
+                                <input type="number" id="width" placeholder="Ancho" min="0" max="1920">
+                                <input type="number" id="height" placeholder="Alto" min="0" max="1080">
+                            </div>
+                        </div>
                         
-                        <button class="transition-btn fade-btn" id="btn-fade" title="Fundido (F)">
-                            <i class="fas fa-adjust"></i>
-                            <span>FADE</span>
-                        </button>
+                        <div class="control-group">
+                            <label>Rotación:</label>
+                            <input type="range" id="rotation" min="0" max="360" value="0">
+                            <span id="rotationValue">0°</span>
+                        </div>
                         
-                        <button class="transition-btn preview-btn" id="btn-preview" title="Previsualizar transición">
-                            <i class="fas fa-eye"></i>
-                            <span>PREVIEW</span>
-                        </button>
+                        <div class="control-group">
+                            <label>Opacidad:</label>
+                            <input type="range" id="opacity" min="0" max="100" value="100">
+                            <span id="opacityValue">100%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Vista previa/Programa (como OBS) -->
+                <div class="preview-program-container">
+                    <div class="preview-program">
+                        <div class="preview-box" id="previewBox">
+                            <div class="box-label">PREVIEW</div>
+                            <div class="box-content">
+                                <!-- Vista previa se actualiza aquí -->
+                            </div>
+                        </div>
+                        
+                        <div class="program-box" id="programBox">
+                            <div class="box-label">PROGRAM</div>
+                            <div class="box-content">
+                                <!-- Programa actual se muestra aquí -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Controles de transición -->
+                    <div class="transition-controls">
+                        <div class="transition-selector">
+                            <select id="transitionType">
+                                <option value="cut">Corte</option>
+                                <option value="fade" selected>Fundido</option>
+                                <option value="slide">Deslizar</option>
+                                <option value="swipe">Swipe</option>
+                                <option value="zoom">Zoom</option>
+                                <option value="stinger">Stinger</option>
+                            </select>
+                            
+                            <div class="transition-duration">
+                                <input type="range" id="transitionDuration" min="0" max="5000" value="1000">
+                                <span id="durationValue">1.0s</span>
+                            </div>
+                        </div>
+                        
+                        <div class="transition-buttons">
+                            <button class="transition-btn cut-btn" id="btn-cut">
+                                <i class="fas fa-bolt"></i>
+                                <span>CUT</span>
+                            </button>
+                            
+                            <button class="transition-btn auto-btn" id="btn-auto">
+                                <i class="fas fa-play"></i>
+                                <span>AUTO</span>
+                            </button>
+                            
+                            <button class="transition-btn fade-btn" id="btn-fade">
+                                <i class="fas fa-adjust"></i>
+                                <span>FADE</span>
+                            </button>
+                            
+                            <button class="transition-btn stinger-btn" id="btn-stinger">
+                                <i class="fas fa-star"></i>
+                                <span>STINGER</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- SIDEBAR DERECHA - ESCENAS Y CONTROLES -->
+            <!-- SIDEBAR DERECHA - ESCENAS Y PROPIEDADES -->
             <aside class="sidebar-right">
                 <!-- Pestañas de controles -->
                 <div class="sidebar-tabs">
@@ -441,17 +470,17 @@
                         <i class="fas fa-layer-group"></i>
                         <span>Escenas</span>
                     </button>
-                    <button class="tab-btn" data-tab="audio-control">
+                    <button class="tab-btn" data-tab="properties-control">
                         <i class="fas fa-sliders-h"></i>
+                        <span>Propiedades</span>
+                    </button>
+                    <button class="tab-btn" data-tab="filters-control">
+                        <i class="fas fa-filter"></i>
+                        <span>Filtros</span>
+                    </button>
+                    <button class="tab-btn" data-tab="audio-control">
+                        <i class="fas fa-volume-up"></i>
                         <span>Audio</span>
-                    </button>
-                    <button class="tab-btn" data-tab="stream-control">
-                        <i class="fas fa-broadcast-tower"></i>
-                        <span>Stream</span>
-                    </button>
-                    <button class="tab-btn" data-tab="recording-control">
-                        <i class="fas fa-record-vinyl"></i>
-                        <span>Grabación</span>
                     </button>
                 </div>
                 
@@ -460,84 +489,140 @@
                     <div class="scenes-header">
                         <h3>Escenas</h3>
                         <div class="scene-actions">
-                            <button class="icon-btn" id="btn-add-scene" title="Nueva escena">
+                            <button class="icon-btn" id="btn-add-scene">
                                 <i class="fas fa-plus"></i>
                             </button>
-                            <button class="icon-btn" id="btn-duplicate-scene" title="Duplicar escena">
+                            <button class="icon-btn" id="btn-duplicate-scene">
                                 <i class="fas fa-copy"></i>
                             </button>
-                            <button class="icon-btn" id="btn-scene-settings" title="Configurar escenas">
-                                <i class="fas fa-cog"></i>
+                            <button class="icon-btn" id="btn-scene-transition">
+                                <i class="fas fa-exchange-alt"></i>
                             </button>
                         </div>
                     </div>
                     
                     <div class="scenes-list" id="scenesList">
                         <!-- Escenas dinámicas -->
-                        <div class="scene-item active" data-scene-id="scene1">
-                            <div class="scene-preview">
-                                <div class="scene-number">1</div>
+                    </div>
+                    
+                    <div class="scene-sources">
+                        <h4>Fuentes en Escena</h4>
+                        <div class="sources-tree" id="sceneSourcesTree">
+                            <!-- Árbol de fuentes -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pestaña de Propiedades -->
+                <div class="tab-content" id="properties-control">
+                    <div class="properties-header">
+                        <h3>Propiedades</h3>
+                        <div class="selected-item" id="selectedItemInfo">
+                            <span>Nada seleccionado</span>
+                        </div>
+                    </div>
+                    
+                    <div class="properties-panel" id="propertiesPanel">
+                        <div class="property-group">
+                            <h4>Transformación</h4>
+                            <div class="property-row">
+                                <label>Posición X:</label>
+                                <input type="number" id="propPosX" disabled>
                             </div>
-                            <div class="scene-info">
-                                <div class="scene-name">Estudio Principal</div>
-                                <div class="scene-details">2 fuentes • Fullscreen</div>
+                            <div class="property-row">
+                                <label>Posición Y:</label>
+                                <input type="number" id="propPosY" disabled>
                             </div>
-                            <div class="scene-actions">
-                                <button class="scene-btn preview-btn" title="Previsualizar">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="scene-btn program-btn" title="Ir a program">
-                                    <i class="fas fa-play"></i>
-                                </button>
+                            <div class="property-row">
+                                <label>Ancho:</label>
+                                <input type="number" id="propWidth" disabled>
+                            </div>
+                            <div class="property-row">
+                                <label>Alto:</label>
+                                <input type="number" id="propHeight" disabled>
+                            </div>
+                            <div class="property-row">
+                                <label>Rotación:</label>
+                                <input type="range" id="propRotation" min="0" max="360" disabled>
+                            </div>
+                            <div class="property-row">
+                                <label>Opacidad:</label>
+                                <input type="range" id="propOpacity" min="0" max="100" disabled>
                             </div>
                         </div>
                         
-                        <div class="scene-item" data-scene-id="scene2">
-                            <div class="scene-preview">
-                                <div class="scene-number">2</div>
+                        <div class="property-group">
+                            <h4>Apariencia</h4>
+                            <div class="property-row">
+                                <label>Crop Top:</label>
+                                <input type="number" id="propCropTop" min="0" disabled>
                             </div>
-                            <div class="scene-info">
-                                <div class="scene-name">Doble Cámara</div>
-                                <div class="scene-details">3 fuentes • Split</div>
+                            <div class="property-row">
+                                <label>Crop Bottom:</label>
+                                <input type="number" id="propCropBottom" min="0" disabled>
                             </div>
-                            <div class="scene-actions">
-                                <button class="scene-btn preview-btn" title="Previsualizar">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="scene-btn program-btn" title="Ir a program">
-                                    <i class="fas fa-play"></i>
-                                </button>
+                            <div class="property-row">
+                                <label>Crop Left:</label>
+                                <input type="number" id="propCropLeft" min="0" disabled>
+                            </div>
+                            <div class="property-row">
+                                <label>Crop Right:</label>
+                                <input type="number" id="propCropRight" min="0" disabled>
                             </div>
                         </div>
                         
-                        <div class="scene-item" data-scene-id="scene3">
-                            <div class="scene-preview">
-                                <div class="scene-number">3</div>
+                        <div class="property-group">
+                            <h4>Efectos</h4>
+                            <div class="property-row">
+                                <label>Brillo:</label>
+                                <input type="range" id="propBrightness" min="0" max="200" value="100" disabled>
                             </div>
-                            <div class="scene-info">
-                                <div class="scene-name">Presentación</div>
-                                <div class="scene-details">2 fuentes • PiP</div>
+                            <div class="property-row">
+                                <label>Contraste:</label>
+                                <input type="range" id="propContrast" min="0" max="200" value="100" disabled>
                             </div>
-                            <div class="scene-actions">
-                                <button class="scene-btn preview-btn" title="Previsualizar">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="scene-btn program-btn" title="Ir a program">
-                                    <i class="fas fa-play"></i>
-                                </button>
+                            <div class="property-row">
+                                <label>Saturación:</label>
+                                <input type="range" id="propSaturation" min="0" max="200" value="100" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pestaña de Filtros -->
+                <div class="tab-content" id="filters-control">
+                    <div class="filters-header">
+                        <h3>Filtros y Efectos</h3>
+                        <button class="icon-btn" id="btn-add-filter">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="filters-list" id="filtersList">
+                        <div class="filter-category">
+                            <h4>Efectos de Video</h4>
+                            <div class="filter-items">
+                                <button class="filter-btn" data-filter="blur">Desenfoque</button>
+                                <button class="filter-btn" data-filter="sharpen">Enfocar</button>
+                                <button class="filter-btn" data-filter="color-key">Chroma Key</button>
+                                <button class="filter-btn" data-filter="mask">Máscara</button>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-category">
+                            <h4>Transiciones</h4>
+                            <div class="filter-items">
+                                <button class="filter-btn" data-filter="fade">Fundido</button>
+                                <button class="filter-btn" data-filter="slide">Deslizar</button>
+                                <button class="filter-btn" data-filter="wipe">Wipe</button>
+                                <button class="filter-btn" data-filter="zoom">Zoom</button>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="scene-transitions">
-                        <h4>Transiciones de Escena</h4>
-                        <div class="transition-presets">
-                            <button class="preset-btn" data-transition="cut">Corte</button>
-                            <button class="preset-btn active" data-transition="fade">Fundido</button>
-                            <button class="preset-btn" data-transition="slide">Slide</button>
-                            <button class="preset-btn" data-transition="zoom">Zoom</button>
-                            <button class="preset-btn" data-transition="wipe">Wipe</button>
-                        </div>
+                    <div class="active-filters" id="activeFilters">
+                        <h4>Filtros Activos</h4>
+                        <!-- Filtros aplicados se muestran aquí -->
                     </div>
                 </div>
                 
@@ -545,358 +630,80 @@
                 <div class="tab-content" id="audio-control">
                     <div class="audio-header">
                         <h3>Mezclador de Audio</h3>
-                        <div class="audio-master">
-                            <label>Master</label>
-                            <div class="master-controls">
-                                <button class="icon-btn" id="btn-mute-master" title="Silenciar">
-                                    <i class="fas fa-volume-mute"></i>
-                                </button>
-                                <input type="range" class="master-fader" id="masterVolume" min="0" max="100" value="80">
-                                <span class="volume-value">80%</span>
-                            </div>
-                        </div>
                     </div>
                     
                     <div class="audio-channels" id="audioChannels">
-                        <!-- Canales de audio dinámicos -->
-                        <div class="audio-channel" data-channel-id="ch1">
-                            <div class="channel-header">
-                                <div class="channel-name">Mic Principal</div>
-                                <div class="channel-controls">
-                                    <button class="channel-btn mute-btn" title="Silenciar">
-                                        <i class="fas fa-volume-mute"></i>
-                                    </button>
-                                    <button class="channel-btn solo-btn" title="Solo">
-                                        <i class="fas fa-headphones"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="channel-fader">
-                                <input type="range" class="volume-fader" min="0" max="100" value="75">
-                                <div class="volume-meter">
-                                    <div class="volume-level" style="height: 75%;"></div>
-                                    <div class="volume-peak"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="channel-footer">
-                                <div class="volume-display">75%</div>
-                                <div class="vu-meter">
-                                    <div class="vu-bar" style="width: 60%;"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="audio-channel" data-channel-id="ch2">
-                            <div class="channel-header">
-                                <div class="channel-name">Audio Sistema</div>
-                                <div class="channel-controls">
-                                    <button class="channel-btn mute-btn" title="Silenciar">
-                                        <i class="fas fa-volume-up"></i>
-                                    </button>
-                                    <button class="channel-btn solo-btn" title="Solo">
-                                        <i class="fas fa-headphones"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="channel-fader">
-                                <input type="range" class="volume-fader" min="0" max="100" value="65">
-                                <div class="volume-meter">
-                                    <div class="volume-level" style="height: 65%;"></div>
-                                    <div class="volume-peak"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="channel-footer">
-                                <div class="volume-display">65%</div>
-                                <div class="vu-meter">
-                                    <div class="vu-bar" style="width: 40%;"></div>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Canales de audio -->
                     </div>
                     
-                    <div class="audio-effects">
-                        <h4>Efectos de Audio</h4>
-                        <div class="effects-list">
-                            <button class="effect-btn">
-                                <i class="fas fa-wave-square"></i>
-                                <span>EQ</span>
-                            </button>
-                            <button class="effect-btn">
-                                <i class="fas fa-compress-alt"></i>
-                                <span>Compresor</span>
-                            </button>
-                            <button class="effect-btn">
-                                <i class="fas fa-echo"></i>
-                                <span>Reverb</span>
-                            </button>
-                            <button class="effect-btn">
-                                <i class="fas fa-filter"></i>
-                                <span>Filtro</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Pestaña de Streaming -->
-                <div class="tab-content" id="stream-control">
-                    <div class="stream-header">
-                        <h3>Control de Streaming</h3>
-                        <div class="stream-status">
-                            <div class="status-indicator">
-                                <div class="status-dot" id="streamStatusDot"></div>
-                                <span id="streamStatusText">Desconectado</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="stream-controls">
-                        <button class="stream-btn start-btn" id="btn-start-stream">
-                            <i class="fas fa-play-circle"></i>
-                            <span>INICIAR STREAM</span>
-                        </button>
-                        
-                        <button class="stream-btn stop-btn disabled" id="btn-stop-stream">
-                            <i class="fas fa-stop-circle"></i>
-                            <span>DETENER STREAM</span>
-                        </button>
-                    </div>
-                    
-                    <div class="stream-destinations">
-                        <h4>Destinos de Stream</h4>
-                        <div class="destinations-list" id="destinationsList">
-                            <!-- Destinos dinámicos -->
-                            <div class="destination-item active" data-destination-id="youtube">
-                                <div class="destination-icon">
-                                    <i class="fab fa-youtube"></i>
-                                </div>
-                                <div class="destination-info">
-                                    <div class="destination-name">YouTube Live</div>
-                                    <div class="destination-status">Conectado</div>
-                                </div>
-                                <div class="destination-stats">
-                                    <span class="bitrate">5 Mbps</span>
-                                    <span class="viewers">245 viewers</span>
-                                </div>
-                            </div>
-                            
-                            <div class="destination-item" data-destination-id="facebook">
-                                <div class="destination-icon">
-                                    <i class="fab fa-facebook"></i>
-                                </div>
-                                <div class="destination-info">
-                                    <div class="destination-name">Facebook Live</div>
-                                    <div class="destination-status">Desconectado</div>
-                                </div>
-                                <div class="destination-stats">
-                                    <span class="bitrate">-</span>
-                                    <span class="viewers">-</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <button class="btn-add-destination" id="btn-add-destination">
-                            <i class="fas fa-plus"></i>
-                            <span>Agregar Destino</span>
-                        </button>
-                    </div>
-                    
-                    <div class="stream-stats">
-                        <h4>Estadísticas</h4>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-label">Bitrate</div>
-                                <div class="stat-value" id="streamBitrate">0 Mbps</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">FPS</div>
-                                <div class="stat-value" id="streamFps">0</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Latencia</div>
-                                <div class="stat-value" id="streamLatency">0ms</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Dropped</div>
-                                <div class="stat-value" id="streamDropped">0</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Pestaña de Grabación -->
-                <div class="tab-content" id="recording-control">
-                    <div class="recording-header">
-                        <h3>Control de Grabación</h3>
-                        <div class="recording-status">
-                            <div class="status-indicator">
-                                <div class="status-dot" id="recordingStatusDot"></div>
-                                <span id="recordingStatusText">Inactivo</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="recording-controls">
-                        <button class="record-btn start-btn" id="btn-start-recording">
-                            <i class="fas fa-circle"></i>
-                            <span>INICIAR GRABACIÓN</span>
-                        </button>
-                        
-                        <button class="record-btn stop-btn disabled" id="btn-stop-recording">
-                            <i class="fas fa-stop"></i>
-                            <span>DETENER GRABACIÓN</span>
-                        </button>
-                        
-                        <button class="record-btn pause-btn" id="btn-pause-recording">
-                            <i class="fas fa-pause"></i>
-                            <span>PAUSAR</span>
-                        </button>
-                    </div>
-                    
-                    <div class="recording-settings">
-                        <h4>Configuración</h4>
-                        <div class="settings-grid">
-                            <div class="setting-item">
-                                <label>Formato:</label>
-                                <select id="recordingFormat">
-                                    <option value="mp4">MP4 (H.264)</option>
-                                    <option value="mov">MOV (ProRes)</option>
-                                    <option value="mkv">MKV</option>
-                                    <option value="ts">TS</option>
-                                </select>
-                            </div>
-                            
-                            <div class="setting-item">
-                                <label>Calidad:</label>
-                                <select id="recordingQuality">
-                                    <option value="high">Alta</option>
-                                    <option value="medium" selected>Media</option>
-                                    <option value="low">Baja</option>
-                                </select>
-                            </div>
-                            
-                            <div class="setting-item">
-                                <label>Ruta:</label>
-                                <input type="text" id="recordingPath" value="./recordings" readonly>
-                                <button class="icon-btn" id="btn-browse-path" title="Explorar">
-                                    <i class="fas fa-folder-open"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="recording-info">
-                        <h4>Información de Grabación</h4>
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <div class="info-label">Duración:</div>
-                                <div class="info-value" id="recordingDuration">00:00:00</div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">Tamaño:</div>
-                                <div class="info-value" id="recordingSize">0 MB</div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">Archivo:</div>
-                                <div class="info-value" id="recordingFilename">-</div>
-                            </div>
+                    <div class="audio-master">
+                        <div class="master-controls">
+                            <label>Master:</label>
+                            <input type="range" id="masterVolume" min="0" max="100" value="80">
+                            <span class="volume-value">80%</span>
                         </div>
                     </div>
                 </div>
             </aside>
 
-            <!-- FOOTER - TRANSPORTE Y CONTROLES MAESTROS -->
+            <!-- FOOTER - TRANSMISIÓN Y CONTROLES -->
             <footer class="app-footer">
                 <div class="footer-left">
-                    <div class="transport-controls">
-                        <button class="transport-btn" id="btn-rewind" title="Retroceder">
-                            <i class="fas fa-backward"></i>
+                    <div class="stream-controls">
+                        <button class="stream-btn" id="btn-start-stream">
+                            <i class="fas fa-play-circle"></i>
+                            <span>INICIAR STREAM</span>
                         </button>
                         
-                        <button class="transport-btn" id="btn-play" title="Reproducir">
-                            <i class="fas fa-play"></i>
+                        <button class="stream-btn stop-btn" id="btn-stop-stream" disabled>
+                            <i class="fas fa-stop-circle"></i>
+                            <span>DETENER STREAM</span>
                         </button>
                         
-                        <button class="transport-btn" id="btn-pause" title="Pausar">
-                            <i class="fas fa-pause"></i>
+                        <button class="stream-btn record-btn" id="btn-start-recording">
+                            <i class="fas fa-circle"></i>
+                            <span>GRABAR</span>
                         </button>
-                        
-                        <button class="transport-btn" id="btn-forward" title="Adelantar">
-                            <i class="fas fa-forward"></i>
-                        </button>
-                        
-                        <button class="transport-btn" id="btn-stop" title="Detener">
-                            <i class="fas fa-stop"></i>
-                        </button>
-                        
-                        <button class="transport-btn" id="btn-loop" title="Bucle">
-                            <i class="fas fa-redo"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="timeline-container">
-                        <div class="timeline">
-                            <div class="timeline-progress" id="timelineProgress"></div>
-                            <div class="timeline-marker" id="timelineMarker"></div>
-                        </div>
-                        <div class="time-display">
-                            <span id="currentTimeline">00:00:00</span> /
-                            <span id="totalTimeline">00:00:00</span>
-                        </div>
                     </div>
                 </div>
                 
                 <div class="footer-center">
-                    <div class="master-controls">
-                        <button class="master-btn emergency-btn" id="btn-emergency" title="Corte de emergencia">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <span>EMERGENCIA</span>
-                        </button>
-                        
-                        <button class="master-btn blackout-btn" id="btn-blackout" title="Blackout">
-                            <i class="fas fa-moon"></i>
-                            <span>BLACKOUT</span>
-                        </button>
-                        
-                        <button class="master-btn freeze-btn" id="btn-freeze" title="Congelar">
-                            <i class="fas fa-snowflake"></i>
-                            <span>FREEZE</span>
-                        </button>
+                    <div class="broadcast-info">
+                        <div class="info-item">
+                            <span class="info-label">Bitrate:</span>
+                            <span class="info-value" id="streamBitrate">0 Mbps</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">FPS:</span>
+                            <span class="info-value" id="streamFps">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Dropped:</span>
+                            <span class="info-value" id="streamDropped">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">CPU:</span>
+                            <span class="info-value" id="streamCpu">0%</span>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="footer-right">
-                    <div class="footer-stats">
-                        <div class="stat-item">
-                            <div class="stat-label">CPU</div>
-                            <div class="stat-value" id="footerCpu">0%</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">MEM</div>
-                            <div class="stat-value" id="footerMem">0%</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">GPU</div>
-                            <div class="stat-value" id="footerGpu">0%</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">NET</div>
-                            <div class="stat-value" id="footerNet">0kb/s</div>
-                        </div>
-                    </div>
-                    
-                    <div class="connection-status">
-                        <div class="status-item">
-                            <i class="fas fa-server"></i>
-                            <span id="serverStatus">Conectado</span>
-                        </div>
-                        <div class="status-item">
-                            <i class="fas fa-wifi"></i>
-                            <span id="networkStatus">Online</span>
-                        </div>
+                    <div class="master-controls">
+                        <button class="master-btn emergency-btn" id="btn-emergency">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>EMERGENCIA</span>
+                        </button>
+                        
+                        <button class="master-btn" id="btn-blackout">
+                            <i class="fas fa-moon"></i>
+                            <span>BLACKOUT</span>
+                        </button>
+                        
+                        <button class="master-btn" id="btn-freeze">
+                            <i class="fas fa-snowflake"></i>
+                            <span>FREEZE</span>
+                        </button>
                     </div>
                 </div>
             </footer>
@@ -905,57 +712,75 @@
 
     <!-- MODALES -->
     
-    <!-- Modal Configuración -->
-    <div id="modalSettings" class="modal">
+    <!-- Modal Agregar Fuente -->
+    <div id="modalAddSource" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Configuración del Sistema</h2>
-                <button class="modal-close" id="closeSettings">&times;</button>
+                <h2>Agregar Fuente</h2>
+                <button class="modal-close" id="closeAddSource">&times;</button>
             </div>
             <div class="modal-body">
-                <!-- Contenido de configuración -->
+                <div class="source-types">
+                    <div class="source-type" data-type="video">
+                        <i class="fas fa-camera"></i>
+                        <h3>Dispositivo de Video</h3>
+                        <p>Cámara, capturadora, NDI</p>
+                    </div>
+                    
+                    <div class="source-type" data-type="audio">
+                        <i class="fas fa-microphone"></i>
+                        <h3>Dispositivo de Audio</h3>
+                        <p>Micrófono, entrada de audio</p>
+                    </div>
+                    
+                    <div class="source-type" data-type="image">
+                        <i class="fas fa-image"></i>
+                        <h3>Imagen</h3>
+                        <p>JPG, PNG, GIF</p>
+                    </div>
+                    
+                    <div class="source-type" data-type="video-file">
+                        <i class="fas fa-video"></i>
+                        <h3>Archivo de Video</h3>
+                        <p>MP4, MOV, AVI</p>
+                    </div>
+                    
+                    <div class="source-type" data-type="browser">
+                        <i class="fas fa-globe"></i>
+                        <h3>Navegador</h3>
+                        <p>Página web</p>
+                    </div>
+                    
+                    <div class="source-type" data-type="text">
+                        <i class="fas fa-font"></i>
+                        <h3>Texto</h3>
+                        <p>Texto, títulos, subtítulos</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     
-    <!-- Modal Salidas -->
-    <div id="modalOutputs" class="modal">
+    <!-- Modal Configuración de Fuente -->
+    <div id="modalSourceSettings" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Configuración de Salidas</h2>
-                <button class="modal-close" id="closeOutputs">&times;</button>
+                <h2 id="sourceSettingsTitle">Configuración</h2>
+                <button class="modal-close" id="closeSourceSettings">&times;</button>
             </div>
-            <div class="modal-body">
-                <!-- Contenido de salidas -->
+            <div class="modal-body" id="sourceSettingsContent">
+                <!-- Configuración dinámica -->
             </div>
         </div>
     </div>
-    
-    <!-- Modal Transmisión -->
-    <div id="modalBroadcast" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Configuración de Transmisión</h2>
-                <button class="modal-close" id="closeBroadcast">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- Contenido de transmisión -->
-            </div>
-        </div>
-    </div>
-    
+
     <!-- Notificaciones -->
     <div id="notificationContainer" class="notification-container"></div>
 
     <!-- Scripts -->
     <script src="src/js/utils.js"></script>
-    <script src="src/js/api.js"></script>
-    <script src="src/js/hardware.js"></script>
-    <script src="src/js/audio.js"></script>
-    <script src="src/js/scenes.js"></script>
-    <script src="src/js/transitions.js"></script>
-    <script src="src/js/multiviewer.js"></script>
-    <script src="src/js/streaming.js"></script>
+    <script src="src/js/videoEngine.js"></script>
+    <script src="src/js/sceneEditor.js"></script>
     <script src="src/js/main.js"></script>
 </body>
 </html>

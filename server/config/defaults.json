@@ -1,0 +1,112 @@
+{
+  "system": {
+    "name": "TeleMaster Pro",
+    "version": "1.0.0",
+    "autoStart": false,
+    "logLevel": "info",
+    "timezone": "UTC",
+    "language": "es"
+  },
+  "video": {
+    "defaultResolution": "1920x1080",
+    "defaultFps": 50,
+    "defaultBitrate": "8000000",
+    "defaultCodec": "h264",
+    "bufferSize": "10000000",
+    "keyframeInterval": 2,
+    "profile": "high",
+    "preset": "veryfast",
+    "tune": "zerolatency"
+  },
+  "audio": {
+    "channels": 2,
+    "sampleRate": 48000,
+    "bitrate": "192000",
+    "codec": "aac",
+    "profile": "aac_low",
+    "volume": 1.0
+  },
+  "streaming": {
+    "defaultProtocol": "rtmp",
+    "adaptiveBitrate": true,
+    "redundancy": false,
+    "maxRetries": 3,
+    "reconnectDelay": 5000,
+    "timeout": 30000
+  },
+  "recording": {
+    "defaultFormat": "mp4",
+    "defaultCodec": "h264",
+    "defaultPath": "./recordings",
+    "autoSegment": false,
+    "segmentDuration": 600,
+    "maxFileSize": 1073741824,
+    "metadata": {
+      "encoder": "TeleMaster Pro",
+      "service_provider": "Custom Broadcast"
+    }
+  },
+  "hardware": {
+    "blackmagic": true,
+    "ndi": true,
+    "usb": true,
+    "ipCameras": true,
+    "autoDetect": true,
+    "detectInterval": 30000
+  },
+  "ui": {
+    "theme": "dark",
+    "multiviewerLayout": "2x2",
+    "showStats": true,
+    "autoHideControls": false,
+    "animationSpeed": "normal"
+  },
+  "security": {
+    "enableAuth": false,
+    "enableCORS": true,
+    "allowedOrigins": ["*"],
+    "apiKey": null,
+    "sessionTimeout": 3600
+  },
+  "paths": {
+    "recordings": "./recordings",
+    "logs": "./logs",
+    "config": "./server/config",
+    "templates": "./src/assets/templates",
+    "cache": "./cache"
+  },
+  "destinations": [
+    {
+      "name": "YouTube",
+      "enabled": false,
+      "type": "rtmp",
+      "url": "rtmp://a.rtmp.youtube.com/live2",
+      "key": "",
+      "bitrate": "5000000"
+    },
+    {
+      "name": "Facebook",
+      "enabled": false,
+      "type": "rtmp",
+      "url": "rtmp://live-api-s.facebook.com:80/rtmp",
+      "key": "",
+      "bitrate": "4000000"
+    },
+    {
+      "name": "Twitch",
+      "enabled": false,
+      "type": "rtmp",
+      "url": "rtmp://live.twitch.tv/app",
+      "key": "",
+      "bitrate": "6000000"
+    },
+    {
+      "name": "Local HLS",
+      "enabled": true,
+      "type": "hls",
+      "path": "./streams/live.m3u8",
+      "segmentDuration": 2,
+      "playlistLength": 6
+    }
+  ]
+}

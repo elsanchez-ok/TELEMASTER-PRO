@@ -1015,4 +1015,306 @@ class TeleMasterServer {
         
         // Reiniciar después de un delay
         setTimeout(() => {
-            console.log('✅
+            console.log('✅ System restart complete');
+        }, 1000);
+    }
+    
+    simulateStreamStats(streamId) {
+        const interval = setInterval(() => {
+            const stream = this.streams.get(streamId);
+            
+            if (!stream || stream.status !== 'running') {
+                clearInterval(interval);
+                return;
+            }
+            
+            // Actualizar estadísticas
+            stream.stats = {
+                bitrate: 5000000 + Math.random() * 3000000,
+                bitrateVideo: 4500000 + Math.random() * 2500000,
+                bitrateAudio: 192000,
+                fps: 50 + Math.random() * 10,
+                droppedFrames: stream.stats.droppedFrames + Math.floor(Math.random() * 3),
+                viewers: stream.stats.viewers + Math.floor(Math.random() * 5),
+                latency: 100 + Math.random() * 200
+            };
+            
+            // Notificar a clientes
+            this.broadcast({
+                type: 'stream_stats',
+                streamId,
+                stats: { ...stream.stats },
+                timestamp: new Date().toISOString()
+            });
+            
+        }, 2000);
+    }
+    
+    simulateRecordingStats(recordId) {
+        const interval = setInterval(() => {
+            const recording = this.recordings.get(recordId);
+            
+            if (!recording || recording.status !== 'recording') {
+                clearInterval(interval);
+                return;
+            }
+            
+            // Actualizar estadísticas
+            const now = new Date();
+            const start = new Date(recording.startTime);
+            const duration = (now - start) / 1000;
+            
+            recording.fileInfo.duration = duration;
+            recording.fileInfo.size = Math.floor(duration * 10000000); // 10MB/s
+            
+            recording.stats = {
+                videoBitrate: 5000000 + Math.random() * 2000000,
+                audioBitrate: 192000,
+                fps: 50,
+                frameCount: Math.floor(duration * 50)
+            };
+            
+            // Notificar a clientes
+            this.broadcast({
+                type: 'recording_stats',
+                recordId,
+                stats: { ...recording.stats },
+                fileInfo: { ...recording.fileInfo },
+                timestamp: new Date().toISOString()
+            });
+            
+        }, 1000);
+    }
+    
+    handleWebSocketMessage(ws, message) {
+        try {
+            const data = JSON.parse(message);
+            
+            switch (data.type) {
+                case 'ping':
+                    this.sendToClient(ws, { type: 'pong', timestamp: new Date().toISOString() });
+                    break;
+                    
+                case 'get_status':
+                    this.sendToClient(ws, {
+                        type: 'system_status',
+                        data: this.getSystemStats(),
+                        timestamp: new Date().toISOString()
+                    });
+                    break;
+                    
+                case 'command':
+                    this.handleClientCommand(ws, data);
+                    break;
+                    
+                case 'subscribe':
+                    this.handleSubscription(ws, data);
+                    break;
+                    
+                case 'unsubscribe':
+                    this.handleUnsubscription(ws, data);
+                    break;
+                    
+                default:
+                    console.log(`📨 Unknown WebSocket message type: ${data.type}`);
+            }
+        } catch (error) {
+            console.error('❌ Error handling WebSocket message:', error);
+            this.sendToClient(ws, {
+                type: 'error',
+                error: 'Invalid message format',
+                timestamp: new Date().toISOString()
+            });
+        }
+    }
+    
+    handleClientCommand(ws, data) {
+        const { command, params } = data;
+        
+        console.log(`⚡ Client command (${ws.clientId}): ${command}`);
+        
+        switch (command) {
+            case 'start_stream':
+                this.startStream(params).then(streamId => {
+                    this.sendToClient(ws, {
+                        type: 'command_response',
+                        command: 'start_stream',
+                        success: true,
+                        streamId,
+                        timestamp: new Date().toISOString()
+                    });
+                }).catch(error => {
+                    this.sendToClient(ws, {
+                        type: 'command_response',
+                        command: 'start_stream',
+                        success: false,
+                        error: error.message,
+                        timestamp: new Date().toISOString()
+                    });
+                });
+                break;
+                
+            case 'stop_stream':
+                this.stopStream(params.streamId).then(() => {
+                    this.sendToClient(ws, {
+                        type: 'command_response',
+                        command: 'stop_stream',
+                        success: true,
+                        timestamp: new Date().toISOString()
+                    });
+                }).catch(error => {
+                    this.sendToClient(ws, {
+                        type: 'command_response',
+                        command: 'stop_stream',
+                        success: false,
+                        error: error.message,
+                        timestamp: new Date().toISOString()
+                    });
+                });
+                break;
+                
+            case 'transition':
+                this.performTransition(
+                    params.type,
+                    params.fromScene,
+                    params.toScene,
+                    params.duration
+                ).then(() => {
+                    this.sendToClient(ws, {
+                        type: 'command_response',
+                        command: 'transition',
+                        success: true,
+                        timestamp: new Date().toISOString()
+                    });
+                });
+                break;
+                
+            default:
+                this.sendToClient(ws, {
+                    type: 'command_response',
+                    command,
+                    success: false,
+                    error: 'Unknown command',
+                    timestamp: new Date().toISOString()
+                });
+        }
+    }
+    
+    handleSubscription(ws, data) {
+        const { events } = data;
+        
+        if (!ws.subscriptions) {
+            ws.subscriptions = new Set();
+        }
+        
+        events.forEach(event => {
+            ws.subscriptions.add(event);
+        });
+        
+        this.sendToClient(ws, {
+            type: 'subscription_confirmed',
+            events: Array.from(ws.subscriptions),
+            timestamp: new Date().toISOString()
+        });
+        
+        console.log(`📡 Client ${ws.clientId} subscribed to: ${events.join(', ')}`);
+    }
+    
+    handleUnsubscription(ws, data) {
+        const { events } = data;
+        
+        if (ws.subscriptions) {
+            events.forEach(event => {
+                ws.subscriptions.delete(event);
+            });
+        }
+        
+        this.sendToClient(ws, {
+            type: 'unsubscription_confirmed',
+            events,
+            timestamp: new Date().toISOString()
+        });
+        
+        console.log(`📡 Client ${ws.clientId} unsubscribed from: ${events.join(', ')}`);
+    }
+    
+    broadcast(message) {
+        const messageStr = JSON.stringify(message);
+        
+        this.wss.clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                // Verificar suscripciones si las hay
+                if (client.subscriptions && message.type) {
+                    if (client.subscriptions.has(message.type) || 
+                        client.subscriptions.has('all')) {
+                        client.send(messageStr);
+                    }
+                } else {
+                    // Enviar a todos si no hay suscripciones
+                    client.send(messageStr);
+                }
+            }
+        });
+    }
+    
+    sendToClient(ws, message) {
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify(message));
+        }
+    }
+    
+    start() {
+        this.server.listen(this.port, () => {
+            console.log('='.repeat(60));
+            console.log('🚀 TeleMaster Pro Server Started');
+            console.log('='.repeat(60));
+            console.log(`📡 HTTP Server: http://localhost:${this.port}`);
+            console.log(`🔗 WebSocket Server: ws://localhost:${this.port}`);
+            console.log(`📁 API Base: http://localhost:${this.port}/api`);
+            console.log(`📊 Health Check: http://localhost:${this.port}/api/health`);
+            console.log('='.repeat(60));
+            console.log('Press Ctrl+C to stop the server');
+            console.log('='.repeat(60));
+        });
+        
+        // Manejar cierre elegante
+        process.on('SIGINT', () => this.shutdown());
+        process.on('SIGTERM', () => this.shutdown());
+    }
+    
+    shutdown() {
+        console.log('\n🛑 Shutting down TeleMaster Pro Server...');
+        
+        // Notificar a clientes
+        this.broadcast({
+            type: 'server_shutdown',
+            message: 'Server is shutting down',
+            timestamp: new Date().toISOString()
+        });
+        
+        // Cerrar WebSocket server
+        this.wss.close(() => {
+            console.log('✅ WebSocket server closed');
+        });
+        
+        // Cerrar HTTP server
+        this.server.close(() => {
+            console.log('✅ HTTP server closed');
+            console.log('👋 Goodbye!');
+            process.exit(0);
+        });
+        
+        // Forzar cierre después de 5 segundos
+        setTimeout(() => {
+            console.log('⚠️ Forcing shutdown...');
+            process.exit(1);
+        }, 5000);
+    }
+}
+
+// Iniciar servidor si es el archivo principal
+if (require.main === module) {
+    const server = new TeleMasterServer();
+}
+
+module.exports = TeleMasterServer;

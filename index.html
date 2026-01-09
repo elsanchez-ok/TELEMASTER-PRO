@@ -4,40 +4,447 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TeleMaster Pro - Sistema de Transmisión Profesional</title>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/modals.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="src/css/main.css">
+    <link rel="stylesheet" href="src/css/components.css">
+    <link rel="stylesheet" href="src/css/modals.css">
+    <link rel="stylesheet" href="src/css/responsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="app" class="app-container">
-        <!-- Cargando -->
-        <div id="loading" class="loading-screen">
-            <div class="loading-content">
-                <div class="loading-logo">
-                    <i class="fas fa-tower-broadcast"></i>
-                    <h1>TeleMaster Pro</h1>
+    <!-- Pantalla de carga inicial -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <i class="fas fa-tower-broadcast"></i>
+                <h1>TeleMaster Pro</h1>
+            </div>
+            <div class="loading-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="loadingProgress"></div>
                 </div>
-                <div class="loading-progress">
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
-                    </div>
-                    <div class="loading-text">Inicializando sistema...</div>
-                </div>
+                <div class="loading-text" id="loadingText">Inicializando sistema...</div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="js/utils.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/hardware.js"></script>
-    <script src="js/audio.js"></script>
-    <script src="js/scenes.js"></script>
-    <script src="js/transitions.js"></script>
-    <script src="js/multiviewer.js"></script>
-    <script src="js/streaming.js"></script>
-    <script src="js/main.js"></script>
+    <!-- Aquí se cargará dinámicamente la interfaz -->
+    <div id="appContainer"></div>
+
+    <!-- Scripts principales -->
+    <script src="src/js/utils.js"></script>
+    <script src="src/js/api.js"></script>
+    <script src="src/js/hardware.js"></script>
+    <script src="src/js/audio.js"></script>
+    <script src="src/js/scenes.js"></script>
+    <script src="src/js/transitions.js"></script>
+    <script src="src/js/multiviewer.js"></script>
+    <script src="src/js/streaming.js"></script>
+    <script src="src/js/main.js"></script>
+    
+    <!-- Script para cargar dinámicamente -->
+    <script>
+        // Script que carga la interfaz completa
+        document.addEventListener('DOMContentLoaded', function() {
+            // Actualizar texto de carga
+            document.getElementById('loadingText').textContent = 'Cargando interfaz...';
+            document.getElementById('loadingProgress').style.width = '30%';
+            
+            // Cargar la interfaz de controles dinámicamente
+            setTimeout(() => {
+                loadInterface();
+            }, 1000);
+        });
+        
+        function loadInterface() {
+            document.getElementById('loadingText').textContent = 'Montando componentes...';
+            document.getElementById('loadingProgress').style.width = '60%';
+            
+            // Aquí va TODO el HTML de controles.html
+            const interfaceHTML = `
+                <!-- CONTENIDO COMPLETO DE controles.html -->
+                <div class="app-container">
+                    <!-- HEADER -->
+                    <header class="app-header">
+                        <div class="header-left">
+                            <div class="logo">
+                                <i class="fas fa-tower-broadcast logo-icon"></i>
+                                <span class="logo-text">TeleMaster Pro</span>
+                                <span class="logo-version">v1.0.0</span>
+                            </div>
+                            
+                            <div class="header-controls">
+                                <button class="header-btn" id="btn-settings" title="Configuración">
+                                    <i class="fas fa-cog"></i>
+                                    <span>Configuración</span>
+                                </button>
+                                <button class="header-btn" id="btn-outputs" title="Salidas">
+                                    <i class="fas fa-plug"></i>
+                                    <span>Salidas</span>
+                                </button>
+                                <button class="header-btn" id="btn-broadcast" title="Transmisión">
+                                    <i class="fas fa-satellite-dish"></i>
+                                    <span>Transmisión</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="header-center">
+                            <div class="time-display">
+                                <i class="fas fa-clock"></i>
+                                <span id="currentTime">--:--:--</span>
+                            </div>
+                            
+                            <div class="program-display">
+                                <span class="program-label">PROGRAM:</span>
+                                <span id="currentProgram" class="program-name">Sin señal</span>
+                            </div>
+                        </div>
+                        
+                        <div class="header-right">
+                            <div class="status-indicators">
+                                <div class="status-item">
+                                    <div class="status-dot" id="status-stream"></div>
+                                    <span>STREAM</span>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-dot" id="status-record"></div>
+                                    <span>REC</span>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-dot" id="status-server"></div>
+                                    <span>SERVIDOR</span>
+                                </div>
+                            </div>
+                            
+                            <div class="system-stats">
+                                <div class="stat-item">
+                                    <i class="fas fa-microchip"></i>
+                                    <span id="cpuUsage">0%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-memory"></i>
+                                    <span id="memoryUsage">0%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-network-wired"></i>
+                                    <span id="networkUsage">0kb/s</span>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- ÁREA PRINCIPAL -->
+                    <main class="main-content">
+                        <!-- SIDEBAR IZQUIERDA - FUENTES -->
+                        <aside class="sidebar-left">
+                            <!-- Pestañas de fuentes -->
+                            <div class="sidebar-tabs">
+                                <button class="tab-btn active" data-tab="video-sources">
+                                    <i class="fas fa-video"></i>
+                                    <span>Video</span>
+                                </button>
+                                <button class="tab-btn" data-tab="audio-sources">
+                                    <i class="fas fa-volume-up"></i>
+                                    <span>Audio</span>
+                                </button>
+                                <button class="tab-btn" data-tab="graphics-sources">
+                                    <i class="fas fa-images"></i>
+                                    <span>Gráficos</span>
+                                </button>
+                                <button class="tab-btn" data-tab="media-sources">
+                                    <i class="fas fa-film"></i>
+                                    <span>Medios</span>
+                                </button>
+                            </div>
+                            
+                            <!-- Contenido de pestañas -->
+                            <div class="tab-content active" id="video-sources">
+                                <div class="sources-header">
+                                    <h3>Fuentes de Video</h3>
+                                    <button class="icon-btn" id="btn-refresh-video" title="Actualizar fuentes">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="sources-list" id="videoSourcesList">
+                                    <!-- Fuentes dinámicas se llenarán con JavaScript -->
+                                </div>
+                                
+                                <div class="sources-footer">
+                                    <button class="btn-add-source" id="btn-add-video">
+                                        <i class="fas fa-plus"></i>
+                                        <span>Agregar Fuente</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Más pestañas... -->
+                        </aside>
+
+                        <!-- ÁREA CENTRAL - MULTIVISOR -->
+                        <section class="main-area">
+                            <!-- Barra de herramientas del multivisor -->
+                            <div class="multiviewer-toolbar">
+                                <div class="toolbar-left">
+                                    <div class="layout-selector">
+                                        <button class="layout-btn active" data-layout="2x2" title="2x2">
+                                            <i class="fas fa-th"></i>
+                                        </button>
+                                        <button class="layout-btn" data-layout="1+3" title="1+3">
+                                            <i class="fas fa-th-large"></i>
+                                        </button>
+                                        <button class="layout-btn" data-layout="1+1" title="1+1">
+                                            <i class="fas fa-columns"></i>
+                                        </button>
+                                        <button class="layout-btn" data-layout="full" title="Completo">
+                                            <i class="fas fa-expand"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="multiviewer-controls">
+                                        <button class="icon-btn" id="btn-snapshot" title="Capturar pantalla">
+                                            <i class="fas fa-camera"></i>
+                                        </button>
+                                        <button class="icon-btn" id="btn-zoom" title="Zoom">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                        <button class="icon-btn" id="btn-grid" title="Mostrar grid">
+                                            <i class="fas fa-border-all"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="toolbar-right">
+                                    <div class="resolution-display">
+                                        <i class="fas fa-expand-arrows-alt"></i>
+                                        <span id="currentResolution">1920x1080</span>
+                                    </div>
+                                    
+                                    <div class="fps-display">
+                                        <i class="fas fa-tachometer-alt"></i>
+                                        <span id="currentFps">50</span>
+                                        <span>fps</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Multivisor -->
+                            <div class="multiviewer-container" id="multiviewer">
+                                <!-- Cajas del multivisor... -->
+                            </div>
+                            
+                            <!-- Controles de transición -->
+                            <div class="transition-controls">
+                                <!-- Controles de transición... -->
+                            </div>
+                        </section>
+
+                        <!-- SIDEBAR DERECHA - ESCENAS Y CONTROLES -->
+                        <aside class="sidebar-right">
+                            <!-- Pestañas de controles -->
+                            <div class="sidebar-tabs">
+                                <button class="tab-btn active" data-tab="scenes-control">
+                                    <i class="fas fa-layer-group"></i>
+                                    <span>Escenas</span>
+                                </button>
+                                <button class="tab-btn" data-tab="audio-control">
+                                    <i class="fas fa-sliders-h"></i>
+                                    <span>Audio</span>
+                                </button>
+                                <button class="tab-btn" data-tab="stream-control">
+                                    <i class="fas fa-broadcast-tower"></i>
+                                    <span>Stream</span>
+                                </button>
+                                <button class="tab-btn" data-tab="recording-control">
+                                    <i class="fas fa-record-vinyl"></i>
+                                    <span>Grabación</span>
+                                </button>
+                            </div>
+                            
+                            <!-- Contenido de pestañas... -->
+                        </aside>
+
+                        <!-- FOOTER - TRANSPORTE Y CONTROLES MAESTROS -->
+                        <footer class="app-footer">
+                            <!-- Controles del footer... -->
+                        </footer>
+                    </main>
+                </div>
+                
+                <!-- MODALES -->
+                <div id="modalSettings" class="modal">
+                    <!-- Contenido modal... -->
+                </div>
+                
+                <!-- Notificaciones -->
+                <div id="notificationContainer" class="notification-container"></div>
+            `;
+            
+            // Insertar la interfaz en el contenedor
+            document.getElementById('appContainer').innerHTML = interfaceHTML;
+            
+            // Actualizar progreso
+            document.getElementById('loadingText').textContent = 'Inicializando controles...';
+            document.getElementById('loadingProgress').style.width = '90%';
+            
+            // Inicializar controles después de cargar el HTML
+            setTimeout(() => {
+                // Inicializar sistema
+                if (typeof window.teleMaster !== 'undefined') {
+                    window.teleMaster.init();
+                }
+                
+                // Inicializar controles
+                initializeApplication();
+                
+                // Ocultar pantalla de carga
+                document.getElementById('loadingText').textContent = '¡Listo!';
+                document.getElementById('loadingProgress').style.width = '100%';
+                
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('loadingScreen').style.display = 'none';
+                    }, 500);
+                }, 500);
+                
+            }, 500);
+        }
+        
+        function initializeApplication() {
+            console.log('🚀 Inicializando aplicación...');
+            
+            // Inicializar componentes del sistema
+            initializeSystem();
+            
+            // Inicializar controles de interfaz
+            initializeInterfaceControls();
+            
+            // Conectar con servidor
+            connectToServer();
+            
+            console.log('✅ Aplicación inicializada');
+        }
+        
+        function initializeSystem() {
+            // Aquí iría la inicialización del sistema TeleMaster
+            console.log('⚙️ Inicializando sistema...');
+            
+            // Actualizar hora
+            startClock();
+            
+            // Actualizar estadísticas
+            updateSystemStats();
+        }
+        
+        function initializeInterfaceControls() {
+            // Inicializar todos los controles de la interfaz
+            console.log('🎮 Inicializando controles...');
+            
+            // Inicializar pestañas
+            initializeTabs();
+            
+            // Inicializar botones
+            initializeButtons();
+            
+            // Inicializar eventos
+            setupEventListeners();
+        }
+        
+        function connectToServer() {
+            console.log('🔗 Conectando con servidor...');
+            // Aquí iría la conexión WebSocket/API
+        }
+        
+        // Funciones auxiliares
+        function initializeTabs() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remover clase active de todos
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Agregar clase active
+                    this.classList.add('active');
+                    const tabContent = document.getElementById(tabId);
+                    if (tabContent) {
+                        tabContent.classList.add('active');
+                    }
+                });
+            });
+        }
+        
+        function initializeButtons() {
+            // Configurar botones principales
+            const buttons = [
+                'btn-settings', 'btn-outputs', 'btn-broadcast',
+                'btn-refresh-video', 'btn-add-video',
+                'btn-snapshot', 'btn-zoom', 'btn-grid'
+            ];
+            
+            buttons.forEach(btnId => {
+                const btn = document.getElementById(btnId);
+                if (btn) {
+                    btn.addEventListener('click', () => {
+                        console.log(`🔘 Botón clickeado: ${btnId}`);
+                        // Aquí irían las acciones específicas
+                    });
+                }
+            });
+        }
+        
+        function setupEventListeners() {
+            // Atajos de teclado
+            document.addEventListener('keydown', (e) => {
+                // Ejemplo: Espacio para corte
+                if (e.code === 'Space' && !e.target.matches('input, textarea')) {
+                    e.preventDefault();
+                    console.log('✂️ Corte por teclado');
+                }
+            });
+        }
+        
+        function startClock() {
+            function updateClock() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('es-ES', { 
+                    hour12: false,
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                
+                const timeDisplay = document.getElementById('currentTime');
+                if (timeDisplay) {
+                    timeDisplay.textContent = timeString;
+                }
+            }
+            
+            updateClock();
+            setInterval(updateClock, 1000);
+        }
+        
+        function updateSystemStats() {
+            setInterval(() => {
+                const cpu = 15 + Math.random() * 20;
+                const mem = 40 + Math.random() * 20;
+                const net = 500 + Math.random() * 1500;
+                
+                const cpuDisplay = document.getElementById('cpuUsage');
+                const memDisplay = document.getElementById('memoryUsage');
+                const netDisplay = document.getElementById('networkUsage');
+                
+                if (cpuDisplay) cpuDisplay.textContent = Math.round(cpu) + '%';
+                if (memDisplay) memDisplay.textContent = Math.round(mem) + '%';
+                if (netDisplay) netDisplay.textContent = Math.round(net) + 'kb/s';
+            }, 3000);
+        }
+    </script>
 </body>
 </html>

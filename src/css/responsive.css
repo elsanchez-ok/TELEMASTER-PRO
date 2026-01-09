@@ -1,0 +1,461 @@
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Pantallas muy grandes */
+@media (min-width: 1920px) {
+    .app-container {
+        max-width: 1920px;
+        margin: 0 auto;
+    }
+    
+    .multiviewer-container {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+    }
+}
+
+/* Laptops grandes */
+@media (max-width: 1600px) {
+    .app-container {
+        grid-template-columns: 220px 1fr 300px;
+    }
+    
+    .multiviewer-container {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+    }
+}
+
+/* Laptops medianas */
+@media (max-width: 1366px) {
+    .app-container {
+        grid-template-columns: 200px 1fr 280px;
+        grid-template-rows: 55px 1fr 160px;
+    }
+    
+    .header-controls span,
+    .header-btn span {
+        display: none;
+    }
+    
+    .header-btn {
+        padding: 6px 10px;
+    }
+    
+    .program-display {
+        padding: 6px 10px;
+    }
+    
+    .transition-btn {
+        padding: 10px 16px;
+        min-width: 100px;
+    }
+    
+    .master-btn {
+        padding: 10px 16px;
+    }
+}
+
+/* Tablets en horizontal */
+@media (max-width: 1024px) {
+    .app-container {
+        grid-template-columns: 180px 1fr;
+        grid-template-rows: 50px 1fr 180px;
+    }
+    
+    .sidebar-right {
+        display: none;
+    }
+    
+    .multiviewer-container {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+    }
+    
+    .multiviewer-box:nth-child(3),
+    .multiviewer-box:nth-child(4) {
+        display: none;
+    }
+    
+    .transition-buttons {
+        flex-wrap: wrap;
+    }
+    
+    .transition-btn {
+        flex: 1;
+        min-width: auto;
+    }
+    
+    .footer-left {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .timeline-container {
+        min-width: 100%;
+    }
+}
+
+/* Tablets en vertical */
+@media (max-width: 768px) {
+    .app-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: 45px 1fr auto;
+    }
+    
+    .sidebar-left {
+        display: none;
+    }
+    
+    .multiviewer-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+    }
+    
+    .multiviewer-box:nth-child(2),
+    .multiviewer-box:nth-child(3),
+    .multiviewer-box:nth-child(4) {
+        display: none;
+    }
+    
+    .app-header {
+        flex-direction: column;
+        height: auto;
+        padding: 8px;
+        gap: 8px;
+    }
+    
+    .header-left,
+    .header-center,
+    .header-right {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .header-controls {
+        justify-content: center;
+    }
+    
+    .program-display {
+        justify-content: center;
+    }
+    
+    .status-indicators,
+    .system-stats {
+        justify-content: center;
+    }
+    
+    .transition-controls {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .transition-selector {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .transition-buttons {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 8px;
+    }
+    
+    .transition-btn {
+        flex-shrink: 0;
+    }
+    
+    .app-footer {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px;
+    }
+    
+    .footer-left,
+    .footer-center,
+    .footer-right {
+        width: 100%;
+    }
+    
+    .master-controls {
+        justify-content: center;
+    }
+    
+    .footer-stats {
+        justify-content: center;
+    }
+    
+    .connection-status {
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+
+/* Teléfonos grandes */
+@media (max-width: 480px) {
+    .app-container {
+        grid-template-rows: auto 1fr auto;
+    }
+    
+    .multiviewer-toolbar {
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px;
+    }
+    
+    .toolbar-left,
+    .toolbar-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .layout-selector {
+        flex: 1;
+    }
+    
+    .multiviewer-controls {
+        flex: 1;
+        justify-content: flex-end;
+    }
+    
+    .transition-buttons {
+        flex-direction: column;
+    }
+    
+    .transition-btn {
+        width: 100%;
+    }
+    
+    .master-controls {
+        flex-direction: column;
+    }
+    
+    .master-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .transport-controls {
+        justify-content: center;
+    }
+    
+    .timeline-container {
+        min-width: 100%;
+    }
+}
+
+/* Modo retrato de teléfono */
+@media (max-height: 700px) {
+    .app-container {
+        grid-template-rows: 40px 1fr 140px;
+    }
+    
+    .multiviewer-box .box-placeholder i {
+        font-size: 24px;
+    }
+    
+    .box-placeholder span {
+        font-size: 12px;
+    }
+    
+    .transition-controls {
+        padding: 12px;
+    }
+    
+    .transition-btn {
+        padding: 8px 12px;
+        font-size: var(--font-size-sm);
+    }
+    
+    .app-footer {
+        padding: 8px;
+    }
+}
+
+/* Altura muy pequeña */
+@media (max-height: 600px) {
+    .app-container {
+        grid-template-rows: 35px 1fr 120px;
+    }
+    
+    .multiviewer-toolbar {
+        padding: 6px;
+    }
+    
+    .layout-btn,
+    .icon-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    
+    .transition-controls {
+        padding: 8px;
+        gap: 8px;
+    }
+    
+    .app-footer {
+        padding: 6px;
+    }
+    
+    .transport-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+    
+    .master-btn {
+        padding: 6px 10px;
+        font-size: var(--font-size-xs);
+    }
+}
+
+/* Orientación landscape forzada para móviles */
+@media (max-width: 768px) and (orientation: landscape) {
+    .app-container {
+        grid-template-columns: 180px 1fr;
+        grid-template-rows: 40px 1fr 120px;
+    }
+    
+    .sidebar-left {
+        display: flex;
+    }
+    
+    .multiviewer-container {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+    }
+    
+    .multiviewer-box:nth-child(1),
+    .multiviewer-box:nth-child(2) {
+        display: block;
+    }
+    
+    .multiviewer-box:nth-child(3),
+    .multiviewer-box:nth-child(4) {
+        display: none;
+    }
+}
+
+/* Pantallas táctiles */
+@media (hover: none) and (pointer: coarse) {
+    .source-item,
+    .scene-item,
+    .destination-item {
+        padding: 16px;
+        min-height: 60px;
+    }
+    
+    .action-btn,
+    .scene-btn,
+    .channel-btn,
+    .box-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+    
+    .icon-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .header-btn,
+    .transition-btn,
+    .stream-btn,
+    .record-btn,
+    .master-btn {
+        padding: 12px 20px;
+        min-height: 44px;
+    }
+    
+    input[type="range"] {
+        height: 24px;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .transport-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+    }
+}
+
+/* Alto contraste para accesibilidad */
+@media (prefers-contrast: high) {
+    :root {
+        --border-color: #000;
+        --text-primary: #000;
+        --text-secondary: #333;
+        --accent-color: #0000ff;
+        --danger-color: #ff0000;
+        --success-color: #008000;
+    }
+    
+    .source-item,
+    .scene-item,
+    .destination-item,
+    .audio-channel {
+        border: 2px solid var(--border-color);
+    }
+    
+    .status-dot {
+        border: 1px solid #000;
+    }
+}
+
+/* Modo oscuro forzado (ya lo tenemos) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-dark: #121212;
+        --bg-darker: #0a0a0a;
+        --bg-panel: #1e1e1e;
+        --bg-card: #252525;
+        --text-primary: #ffffff;
+        --text-secondary: #b0b0b0;
+    }
+}
+
+/* Animaciones reducidas para usuarios sensibles */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .pulse,
+    .recording {
+        animation: none;
+    }
+}
+
+/* Zoom del navegador */
+@media (min-resolution: 192dpi) {
+    .box-label,
+    .program-label,
+    .status-item span,
+    .stat-label {
+        font-weight: 600;
+    }
+}
+
+/* Impresión */
+@media print {
+    .app-container {
+        display: none;
+    }
+    
+    .loading-screen {
+        display: flex;
+    }
+    
+    .loading-content {
+        color: #000;
+    }
+}

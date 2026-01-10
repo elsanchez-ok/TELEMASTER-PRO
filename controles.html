@@ -4,9 +4,1093 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TeleMaster Pro - Sistema de Transmisión Profesional</title>
-    <link rel="stylesheet" href="src/css/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos CSS integrados para que funcione todo en un solo archivo */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --dark-bg: #1a1a2e;
+            --dark-bg-light: #252544;
+            --dark-bg-lighter: #2d2d5a;
+            --text-color: #ecf0f1;
+            --text-muted: #95a5a6;
+            --border-color: #34495e;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Pantalla de carga */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .loading-logo {
+            margin-bottom: 2rem;
+        }
+
+        .loading-logo i {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .loading-logo h1 {
+            font-size: 2.5rem;
+            color: var(--text-color);
+        }
+
+        .loading-progress {
+            width: 100%;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: var(--dark-bg-light);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .loading-text {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        /* Contenedor principal */
+        .app-container {
+            display: none;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--dark-bg-light);
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            height: 60px;
+        }
+
+        .header-left, .header-center, .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .logo-version {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            background-color: var(--dark-bg-lighter);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .header-btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        .time-display, .program-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .program-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .program-name {
+            font-weight: bold;
+        }
+
+        .status-indicators {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #7f8c8d;
+        }
+
+        .status-dot.active {
+            background-color: var(--success-color);
+        }
+
+        .system-stats {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        /* ÁREA PRINCIPAL */
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR IZQUIERDA */
+        .sidebar-left {
+            width: 250px;
+            background-color: var(--dark-bg-light);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            background-color: var(--dark-bg-lighter);
+            padding: 0.5rem;
+            gap: 0.2rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.5rem;
+            background-color: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .tab-btn.active {
+            background-color: var(--dark-bg-light);
+            color: var(--primary-color);
+        }
+
+        .tab-content {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .sources-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .sources-header h3 {
+            font-size: 1rem;
+        }
+
+        .icon-btn {
+            background-color: transparent;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 0.3rem;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .icon-btn:hover {
+            background-color: var(--dark-bg-lighter);
+        }
+
+        .sources-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .source-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background-color: var(--dark-bg-lighter);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .source-item:hover {
+            border-color: var(--primary-color);
+        }
+
+        .source-item.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .source-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--dark-bg);
+            border-radius: 4px;
+        }
+
+        .source-info {
+            flex: 1;
+        }
+
+        .source-name {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .source-details {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .sources-footer {
+            margin-top: 1rem;
+        }
+
+        .btn-add-source {
+            width: 100%;
+            padding: 0.5rem;
+            background-color: var(--primary-color);
+            border: none;
+            color: var(--text-color);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .btn-add-source:hover {
+            background-color: #2980b9;
+        }
+
+        /* ÁREA CENTRAL */
+        .main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            gap: 1rem;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--dark-bg-light);
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .toolbar-left, .toolbar-center, .toolbar-right {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tool-group {
+            display: flex;
+            gap: 0.2rem;
+        }
+
+        .tool-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--dark-bg-lighter);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tool-btn.active {
+            background-color: var(--primary-color);
+        }
+
+        .zoom-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .zoom-select {
+            background-color: var(--dark-bg-lighter);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.3rem;
+            border-radius: 4px;
+        }
+
+        /* Editor de video */
+        .video-editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--dark-bg-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .video-canvas {
+            flex: 1;
+            position: relative;
+            background-color: #000;
+            overflow: hidden;
+        }
+
+        .workspace-area {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .video-source {
+            position: absolute;
+            border: 2px solid transparent;
+            cursor: move;
+            user-select: none;
+        }
+
+        .video-source.selected {
+            border-color: var(--primary-color);
+        }
+
+        .source-content {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .source-content video, .source-content img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .source-controls {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            pointer-events: none;
+        }
+
+        .resize-handle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            pointer-events: all;
+            cursor: nwse-resize;
+        }
+
+        .resize-handle.nw {
+            top: 0;
+            left: 0;
+            cursor: nw-resize;
+        }
+
+        .resize-handle.ne {
+            top: 0;
+            right: 0;
+            cursor: ne-resize;
+        }
+
+        .resize-handle.sw {
+            bottom: 0;
+            left: 0;
+            cursor: sw-resize;
+        }
+
+        .resize-handle.se {
+            bottom: 0;
+            right: 0;
+            cursor: se-resize;
+        }
+
+        .rotate-handle {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            pointer-events: all;
+            cursor: grab;
+        }
+
+        .source-info {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-color);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 0.2rem;
+        }
+
+        .safe-areas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .safe-area {
+            position: absolute;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        .action-safe {
+            top: 5%;
+            left: 5%;
+            right: 5%;
+            bottom: 5%;
+        }
+
+        .title-safe {
+            top: 10%;
+            left: 10%;
+            right: 10%;
+            bottom: 10%;
+        }
+
+        .editor-controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            background-color: var(--dark-bg-lighter);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-group label {
+            font-size: 0.9rem;
+        }
+
+        .position-controls, .size-controls {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .position-controls input, .size-controls input {
+            width: 60px;
+            padding: 0.3rem;
+            background-color: var(--dark-bg-light);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 4px;
+        }
+
+        input[type="range"] {
+            width: 80px;
+        }
+
+        /* Vista previa/Programa */
+        .preview-program-container {
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .preview-program {
+            flex: 1;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .preview-box, .program-box {
+            flex: 1;
+            background-color: var(--dark-bg-light);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .box-label {
+            background-color: var(--dark-bg-lighter);
+            padding: 0.3rem;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .box-content {
+            height: calc(100% - 30px);
+            background-color: #000;
+        }
+
+        .transition-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background-color: var(--dark-bg-light);
+            border-radius: 4px;
+        }
+
+        .transition-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .transition-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .transition-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--dark-bg-lighter);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .transition-btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        .cut-btn {
+            background-color: var(--accent-color);
+        }
+
+        .auto-btn {
+            background-color: var(--warning-color);
+        }
+
+        .fade-btn {
+            background-color: var(--primary-color);
+        }
+
+        /* SIDEBAR DERECHA */
+        .sidebar-right {
+            width: 300px;
+            background-color: var(--dark-bg-light);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scenes-header, .properties-header, .filters-header, .audio-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .scenes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .scene-item {
+            padding: 0.5rem;
+            background-color: var(--dark-bg-lighter);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .scene-item:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .scene-item.active {
+            background-color: rgba(52, 152, 219, 0.2);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .scene-sources {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .sources-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .tree-item {
+            padding: 0.3rem 0.5rem;
+            background-color: var(--dark-bg-lighter);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .properties-panel {
+            overflow-y: auto;
+            height: calc(100% - 50px);
+        }
+
+        .property-group {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .property-group h4 {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .property-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .property-row label {
+            font-size: 0.8rem;
+            width: 100px;
+        }
+
+        .property-row input {
+            width: 120px;
+            padding: 0.3rem;
+            background-color: var(--dark-bg-lighter);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 4px;
+        }
+
+        .filter-category {
+            margin-bottom: 1rem;
+        }
+
+        .filter-category h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .filter-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+        }
+
+        .filter-btn {
+            padding: 0.3rem 0.5rem;
+            background-color: var(--dark-bg-lighter);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        .audio-channels {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .audio-channel {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .channel-name {
+            width: 100px;
+            font-size: 0.9rem;
+        }
+
+        .volume-slider {
+            flex: 1;
+        }
+
+        .audio-master {
+            margin-top: 1rem;
+        }
+
+        .master-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* FOOTER */
+        .app-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--dark-bg-light);
+            padding: 0.5rem 1rem;
+            border-top: 1px solid var(--border-color);
+            height: 60px;
+        }
+
+        .footer-left, .footer-center, .footer-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .stream-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .stream-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .stream-btn:not(.stop-btn) {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .stop-btn {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .record-btn {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .broadcast-info {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .info-value {
+            font-weight: bold;
+        }
+
+        .master-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .master-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--dark-bg-lighter);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .master-btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        .emergency-btn {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        /* MODALES */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--dark-bg-light);
+            border-radius: 8px;
+            width: 600px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h2 {
+            font-size: 1.2rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1rem;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        .source-types {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .source-type {
+            padding: 1rem;
+            background-color: var(--dark-bg-lighter);
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .source-type:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .source-type i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .source-type h3 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .source-type p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Notificaciones */
+        .notification-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .notification {
+            background-color: var(--dark-bg-light);
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 4px;
+            box-shadow: var(--shadow);
+            min-width: 300px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.success {
+            border-left-color: var(--success-color);
+        }
+
+        .notification.error {
+            border-left-color: var(--accent-color);
+        }
+
+        .notification.warning {
+            border-left-color: var(--warning-color);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Media queries para responsividad */
+        @media (max-width: 1600px) {
+            .sidebar-left, .sidebar-right {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .sidebar-left, .sidebar-right {
+                width: 180px;
+            }
+            
+            .property-row input {
+                width: 80px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Pantalla de carga -->
@@ -253,7 +1337,7 @@
                     </div>
                     
                     <div class="media-browser">
-                        <input type="file" id="fileUpload" accept=".mp4,.mov,.avi,.jpg,.png,.gif" multiple style="display: none;">
+                        <input type="file" id="fileUpload" accept=".mp4,.mov,.avi,.jpg,.png,.gif,.webm,.mkv" multiple style="display: none;">
                         <button class="btn-add-source" id="btn-upload-media">
                             <i class="fas fa-upload"></i>
                             <span>Subir Archivos</span>
@@ -340,26 +1424,9 @@
                 <div class="video-editor-container">
                     <!-- Canvas principal para video -->
                     <div class="video-canvas" id="videoCanvas">
-                        <!-- Aquí se renderizan las fuentes de video -->
-                        <div class="canvas-overlay grid-overlay" id="gridOverlay"></div>
-                        <div class="canvas-overlay rulers-overlay" id="rulersOverlay"></div>
-                        
                         <!-- Área de trabajo (como en OBS) -->
                         <div class="workspace-area" id="workspace">
                             <!-- Fuentes de video se agregan aquí dinámicamente -->
-                            <div class="video-source" id="source-template" style="display: none;">
-                                <div class="source-content"></div>
-                                <div class="source-controls">
-                                    <div class="resize-handle nw"></div>
-                                    <div class="resize-handle ne"></div>
-                                    <div class="resize-handle sw"></div>
-                                    <div class="resize-handle se"></div>
-                                    <div class="rotate-handle"></div>
-                                </div>
-                                <div class="source-info">
-                                    <span class="source-name"></span>
-                                </div>
-                            </div>
                         </div>
                         
                         <!-- Guías de seguridad -->
@@ -374,16 +1441,16 @@
                         <div class="control-group">
                             <label>Posición:</label>
                             <div class="position-controls">
-                                <input type="number" id="posX" placeholder="X" min="0" max="1920">
-                                <input type="number" id="posY" placeholder="Y" min="0" max="1080">
+                                <input type="number" id="posX" placeholder="X" min="0" max="1920" value="0">
+                                <input type="number" id="posY" placeholder="Y" min="0" max="1080" value="0">
                             </div>
                         </div>
                         
                         <div class="control-group">
                             <label>Tamaño:</label>
                             <div class="size-controls">
-                                <input type="number" id="width" placeholder="Ancho" min="0" max="1920">
-                                <input type="number" id="height" placeholder="Alto" min="0" max="1080">
+                                <input type="number" id="width" placeholder="Ancho" min="0" max="1920" value="640">
+                                <input type="number" id="height" placeholder="Alto" min="0" max="1080" value="360">
                             </div>
                         </div>
                         
@@ -406,14 +1473,14 @@
                     <div class="preview-program">
                         <div class="preview-box" id="previewBox">
                             <div class="box-label">PREVIEW</div>
-                            <div class="box-content">
+                            <div class="box-content" id="previewContent">
                                 <!-- Vista previa se actualiza aquí -->
                             </div>
                         </div>
                         
                         <div class="program-box" id="programBox">
                             <div class="box-label">PROGRAM</div>
-                            <div class="box-content">
+                            <div class="box-content" id="programContent">
                                 <!-- Programa actual se muestra aquí -->
                             </div>
                         </div>
@@ -527,27 +1594,27 @@
                             <h4>Transformación</h4>
                             <div class="property-row">
                                 <label>Posición X:</label>
-                                <input type="number" id="propPosX" disabled>
+                                <input type="number" id="propPosX">
                             </div>
                             <div class="property-row">
                                 <label>Posición Y:</label>
-                                <input type="number" id="propPosY" disabled>
+                                <input type="number" id="propPosY">
                             </div>
                             <div class="property-row">
                                 <label>Ancho:</label>
-                                <input type="number" id="propWidth" disabled>
+                                <input type="number" id="propWidth">
                             </div>
                             <div class="property-row">
                                 <label>Alto:</label>
-                                <input type="number" id="propHeight" disabled>
+                                <input type="number" id="propHeight">
                             </div>
                             <div class="property-row">
                                 <label>Rotación:</label>
-                                <input type="range" id="propRotation" min="0" max="360" disabled>
+                                <input type="range" id="propRotation" min="0" max="360">
                             </div>
                             <div class="property-row">
                                 <label>Opacidad:</label>
-                                <input type="range" id="propOpacity" min="0" max="100" disabled>
+                                <input type="range" id="propOpacity" min="0" max="100" value="100">
                             </div>
                         </div>
                         
@@ -555,19 +1622,19 @@
                             <h4>Apariencia</h4>
                             <div class="property-row">
                                 <label>Crop Top:</label>
-                                <input type="number" id="propCropTop" min="0" disabled>
+                                <input type="number" id="propCropTop" min="0" value="0">
                             </div>
                             <div class="property-row">
                                 <label>Crop Bottom:</label>
-                                <input type="number" id="propCropBottom" min="0" disabled>
+                                <input type="number" id="propCropBottom" min="0" value="0">
                             </div>
                             <div class="property-row">
                                 <label>Crop Left:</label>
-                                <input type="number" id="propCropLeft" min="0" disabled>
+                                <input type="number" id="propCropLeft" min="0" value="0">
                             </div>
                             <div class="property-row">
                                 <label>Crop Right:</label>
-                                <input type="number" id="propCropRight" min="0" disabled>
+                                <input type="number" id="propCropRight" min="0" value="0">
                             </div>
                         </div>
                         
@@ -575,15 +1642,15 @@
                             <h4>Efectos</h4>
                             <div class="property-row">
                                 <label>Brillo:</label>
-                                <input type="range" id="propBrightness" min="0" max="200" value="100" disabled>
+                                <input type="range" id="propBrightness" min="0" max="200" value="100">
                             </div>
                             <div class="property-row">
                                 <label>Contraste:</label>
-                                <input type="range" id="propContrast" min="0" max="200" value="100" disabled>
+                                <input type="range" id="propContrast" min="0" max="200" value="100">
                             </div>
                             <div class="property-row">
                                 <label>Saturación:</label>
-                                <input type="range" id="propSaturation" min="0" max="200" value="100" disabled>
+                                <input type="range" id="propSaturation" min="0" max="200" value="100">
                             </div>
                         </div>
                     </div>
@@ -721,16 +1788,16 @@
             </div>
             <div class="modal-body">
                 <div class="source-types">
-                    <div class="source-type" data-type="video">
+                    <div class="source-type" data-type="camera">
                         <i class="fas fa-camera"></i>
-                        <h3>Dispositivo de Video</h3>
-                        <p>Cámara, capturadora, NDI</p>
+                        <h3>Cámara Web</h3>
+                        <p>Dispositivo de cámara</p>
                     </div>
                     
-                    <div class="source-type" data-type="audio">
+                    <div class="source-type" data-type="microphone">
                         <i class="fas fa-microphone"></i>
-                        <h3>Dispositivo de Audio</h3>
-                        <p>Micrófono, entrada de audio</p>
+                        <h3>Micrófono</h3>
+                        <p>Dispositivo de audio</p>
                     </div>
                     
                     <div class="source-type" data-type="image">
@@ -777,10 +1844,1163 @@
     <!-- Notificaciones -->
     <div id="notificationContainer" class="notification-container"></div>
 
-    <!-- Scripts -->
-    <script src="src/js/utils.js"></script>
-    <script src="src/js/videoEngine.js"></script>
-    <script src="src/js/sceneEditor.js"></script>
-    <script src="src/js/main.js"></script>
+    <!-- Font Awesome (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Script principal -->
+    <script>
+        // Variables globales
+        const TeleMaster = {
+            currentScene: null,
+            scenes: [],
+            sources: [],
+            selectedSource: null,
+            isDragging: false,
+            isResizing: false,
+            currentTool: 'select',
+            zoomLevel: 1,
+            activeModal: null,
+            streamActive: false,
+            recordingActive: false,
+            previewScene: null,
+            programScene: null,
+            videoDevices: [],
+            audioDevices: [],
+            mediaFiles: [],
+            audioContext: null,
+            audioNodes: new Map(),
+            mediaRecorder: null,
+            recordedChunks: []
+        };
+
+        // Clases para manejar la aplicación
+        class Source {
+            constructor(id, type, name, options = {}) {
+                this.id = id;
+                this.type = type;
+                this.name = name;
+                this.x = options.x || 0;
+                this.y = options.y || 0;
+                this.width = options.width || 640;
+                this.height = options.height || 360;
+                this.rotation = options.rotation || 0;
+                this.opacity = options.opacity || 100;
+                this.visible = options.visible !== false;
+                this.selected = false;
+                this.element = null;
+                this.mediaElement = null;
+                this.crop = {
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0
+                };
+                this.filters = {
+                    brightness: 100,
+                    contrast: 100,
+                    saturation: 100
+                };
+                this.audioSettings = {
+                    volume: 100,
+                    muted: false
+                };
+            }
+
+            createElement() {
+                const element = document.createElement('div');
+                element.className = 'video-source';
+                element.id = `source-${this.id}`;
+                element.style.cssText = `
+                    position: absolute;
+                    left: ${this.x}px;
+                    top: ${this.y}px;
+                    width: ${this.width}px;
+                    height: ${this.height}px;
+                    transform: rotate(${this.rotation}deg);
+                    opacity: ${this.opacity / 100};
+                `;
+
+                const content = document.createElement('div');
+                content.className = 'source-content';
+                
+                // Crear elemento multimedia según el tipo
+                switch(this.type) {
+                    case 'camera':
+                        this.mediaElement = document.createElement('video');
+                        this.mediaElement.autoplay = true;
+                        this.mediaElement.muted = true;
+                        this.mediaElement.playsInline = true;
+                        break;
+                    case 'video-file':
+                        this.mediaElement = document.createElement('video');
+                        this.mediaElement.controls = false;
+                        this.mediaElement.autoplay = true;
+                        this.mediaElement.loop = true;
+                        this.mediaElement.muted = true;
+                        break;
+                    case 'image':
+                        this.mediaElement = document.createElement('img');
+                        break;
+                    case 'text':
+                        this.mediaElement = document.createElement('div');
+                        this.mediaElement.className = 'text-source';
+                        this.mediaElement.textContent = this.name;
+                        this.mediaElement.style.cssText = `
+                            width: 100%;
+                            height: 100%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            font-size: 24px;
+                            background: rgba(0, 0, 0, 0.5);
+                        `;
+                        break;
+                }
+
+                if (this.mediaElement) {
+                    content.appendChild(this.mediaElement);
+                }
+
+                // Controles de transformación
+                const controls = document.createElement('div');
+                controls.className = 'source-controls';
+                
+                const resizeHandles = ['nw', 'ne', 'sw', 'se'];
+                resizeHandles.forEach(pos => {
+                    const handle = document.createElement('div');
+                    handle.className = `resize-handle ${pos}`;
+                    handle.dataset.handle = pos;
+                    controls.appendChild(handle);
+                });
+
+                const rotateHandle = document.createElement('div');
+                rotateHandle.className = 'rotate-handle';
+                controls.appendChild(rotateHandle);
+
+                // Información de la fuente
+                const info = document.createElement('div');
+                info.className = 'source-info';
+                info.innerHTML = `<span class="source-name">${this.name}</span>`;
+
+                element.appendChild(content);
+                element.appendChild(controls);
+                element.appendChild(info);
+
+                // Eventos
+                element.addEventListener('mousedown', (e) => this.handleMouseDown(e));
+                
+                this.element = element;
+                return element;
+            }
+
+            handleMouseDown(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                TeleMaster.selectedSource = this;
+                this.selected = true;
+                this.element.classList.add('selected');
+                
+                updatePropertiesPanel();
+                
+                const workspace = document.getElementById('workspace');
+                const startX = e.clientX;
+                const startY = e.clientY;
+                const startLeft = this.x;
+                const startTop = this.y;
+                
+                const handleMouseMove = (moveEvent) => {
+                    const deltaX = moveEvent.clientX - startX;
+                    const deltaY = moveEvent.clientY - startY;
+                    
+                    this.x = startLeft + deltaX;
+                    this.y = startTop + deltaY;
+                    
+                    this.updatePosition();
+                };
+                
+                const handleMouseUp = () => {
+                    document.removeEventListener('mousemove', handleMouseMove);
+                    document.removeEventListener('mouseup', handleMouseUp);
+                };
+                
+                document.addEventListener('mousemove', handleMouseMove);
+                document.addEventListener('mouseup', handleMouseUp);
+            }
+
+            updatePosition() {
+                if (this.element) {
+                    this.element.style.left = `${this.x}px`;
+                    this.element.style.top = `${this.y}px`;
+                    
+                    // Actualizar controles
+                    document.getElementById('posX').value = Math.round(this.x);
+                    document.getElementById('posY').value = Math.round(this.y);
+                    document.getElementById('propPosX').value = Math.round(this.x);
+                    document.getElementById('propPosY').value = Math.round(this.y);
+                }
+            }
+
+            updateSize() {
+                if (this.element) {
+                    this.element.style.width = `${this.width}px`;
+                    this.element.style.height = `${this.height}px`;
+                    
+                    // Actualizar controles
+                    document.getElementById('width').value = Math.round(this.width);
+                    document.getElementById('height').value = Math.round(this.height);
+                    document.getElementById('propWidth').value = Math.round(this.width);
+                    document.getElementById('propHeight').value = Math.round(this.height);
+                }
+            }
+
+            updateRotation() {
+                if (this.element) {
+                    this.element.style.transform = `rotate(${this.rotation}deg)`;
+                    
+                    // Actualizar controles
+                    document.getElementById('rotation').value = Math.round(this.rotation);
+                    document.getElementById('rotationValue').textContent = `${Math.round(this.rotation)}°`;
+                    document.getElementById('propRotation').value = Math.round(this.rotation);
+                }
+            }
+
+            updateOpacity() {
+                if (this.element) {
+                    this.element.style.opacity = this.opacity / 100;
+                    
+                    // Actualizar controles
+                    document.getElementById('opacity').value = this.opacity;
+                    document.getElementById('opacityValue').textContent = `${this.opacity}%`;
+                    document.getElementById('propOpacity').value = this.opacity;
+                }
+            }
+
+            loadMedia(source) {
+                if (!this.mediaElement) return;
+                
+                switch(this.type) {
+                    case 'camera':
+                        if (source && typeof source === 'string') {
+                            navigator.mediaDevices.getUserMedia({
+                                video: { deviceId: source },
+                                audio: false
+                            }).then(stream => {
+                                this.mediaElement.srcObject = stream;
+                            }).catch(showError);
+                        }
+                        break;
+                    case 'video-file':
+                    case 'image':
+                        if (source) {
+                            this.mediaElement.src = source;
+                        }
+                        break;
+                }
+            }
+        }
+
+        class Scene {
+            constructor(id, name) {
+                this.id = id;
+                this.name = name;
+                this.sources = [];
+                this.previewElement = null;
+                this.programElement = null;
+            }
+
+            addSource(source) {
+                this.sources.push(source);
+                updateSceneSourcesList();
+            }
+
+            removeSource(sourceId) {
+                this.sources = this.sources.filter(s => s.id !== sourceId);
+                updateSceneSourcesList();
+            }
+        }
+
+        // Funciones de utilidad
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>${message}</span>
+                    <button class="icon-btn close-notification" style="font-size: 0.8rem;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Botón para cerrar
+            notification.querySelector('.close-notification').addEventListener('click', () => {
+                notification.remove();
+            });
+            
+            // Auto-remover después de 5 segundos
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        function showError(message) {
+            showNotification(`Error: ${message}`, 'error');
+            console.error(message);
+        }
+
+        function showSuccess(message) {
+            showNotification(message, 'success');
+        }
+
+        function showWarning(message) {
+            showNotification(message, 'warning');
+        }
+
+        // Funciones para manejar modales
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'flex';
+                TeleMaster.activeModal = modalId;
+            }
+        }
+
+        function closeModal() {
+            if (TeleMaster.activeModal) {
+                const modal = document.getElementById(TeleMaster.activeModal);
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+                TeleMaster.activeModal = null;
+            }
+        }
+
+        // Funciones para actualizar la interfaz
+        function updatePropertiesPanel() {
+            const source = TeleMaster.selectedSource;
+            const infoElement = document.getElementById('selectedItemInfo');
+            
+            if (source) {
+                infoElement.innerHTML = `<span>${source.name} (${source.type})</span>`;
+                
+                // Habilitar controles
+                ['propPosX', 'propPosY', 'propWidth', 'propHeight', 'propRotation', 
+                 'propOpacity', 'propCropTop', 'propCropBottom', 'propCropLeft', 
+                 'propCropRight', 'propBrightness', 'propContrast', 'propSaturation']
+                    .forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.disabled = false;
+                    });
+                
+                // Actualizar valores
+                document.getElementById('propPosX').value = Math.round(source.x);
+                document.getElementById('propPosY').value = Math.round(source.y);
+                document.getElementById('propWidth').value = Math.round(source.width);
+                document.getElementById('propHeight').value = Math.round(source.height);
+                document.getElementById('propRotation').value = Math.round(source.rotation);
+                document.getElementById('propOpacity').value = source.opacity;
+                document.getElementById('propBrightness').value = source.filters.brightness;
+                document.getElementById('propContrast').value = source.filters.contrast;
+                document.getElementById('propSaturation').value = source.filters.saturation;
+            } else {
+                infoElement.innerHTML = '<span>Nada seleccionado</span>';
+                
+                // Deshabilitar controles
+                ['propPosX', 'propPosY', 'propWidth', 'propHeight', 'propRotation', 
+                 'propOpacity', 'propCropTop', 'propCropBottom', 'propCropLeft', 
+                 'propCropRight', 'propBrightness', 'propContrast', 'propSaturation']
+                    .forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.disabled = true;
+                    });
+            }
+        }
+
+        function updateSceneSourcesList() {
+            const tree = document.getElementById('sceneSourcesTree');
+            if (!tree || !TeleMaster.currentScene) return;
+            
+            tree.innerHTML = '';
+            
+            TeleMaster.currentScene.sources.forEach(source => {
+                const item = document.createElement('div');
+                item.className = 'tree-item';
+                item.innerHTML = `
+                    <i class="fas fa-${getSourceIcon(source.type)}"></i>
+                    <span>${source.name}</span>
+                    <div style="margin-left: auto;">
+                        <button class="icon-btn" data-action="toggle" data-source="${source.id}" title="Mostrar/Ocultar">
+                            <i class="fas fa-${source.visible ? 'eye' : 'eye-slash'}"></i>
+                        </button>
+                        <button class="icon-btn" data-action="remove" data-source="${source.id}" title="Eliminar">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                
+                tree.appendChild(item);
+                
+                // Eventos de los botones
+                item.querySelector('[data-action="toggle"]').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    source.visible = !source.visible;
+                    if (source.element) {
+                        source.element.style.display = source.visible ? 'block' : 'none';
+                    }
+                    updateSceneSourcesList();
+                });
+                
+                item.querySelector('[data-action="remove"]').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (confirm(`¿Eliminar la fuente "${source.name}"?`)) {
+                        if (source.element && source.element.parentNode) {
+                            source.element.parentNode.removeChild(source.element);
+                        }
+                        TeleMaster.currentScene.removeSource(source.id);
+                        TeleMaster.sources = TeleMaster.sources.filter(s => s.id !== source.id);
+                        if (TeleMaster.selectedSource === source) {
+                            TeleMaster.selectedSource = null;
+                            updatePropertiesPanel();
+                        }
+                    }
+                });
+            });
+        }
+
+        function getSourceIcon(type) {
+            const icons = {
+                'camera': 'video',
+                'video-file': 'video',
+                'image': 'image',
+                'text': 'font',
+                'microphone': 'microphone',
+                'browser': 'globe'
+            };
+            return icons[type] || 'file';
+        }
+
+        // Funciones para manejar dispositivos multimedia
+        async function loadMediaDevices() {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                TeleMaster.videoDevices = devices.filter(d => d.kind === 'videoinput');
+                TeleMaster.audioDevices = devices.filter(d => d.kind === 'audioinput');
+                
+                updateVideoSourcesList();
+                updateAudioSourcesList();
+                
+                showSuccess('Dispositivos multimedia cargados');
+            } catch (error) {
+                showError('Error al cargar dispositivos multimedia');
+            }
+        }
+
+        function updateVideoSourcesList() {
+            const list = document.getElementById('videoSourcesList');
+            if (!list) return;
+            
+            list.innerHTML = '';
+            
+            // Agregar cámaras disponibles
+            TeleMaster.videoDevices.forEach(device => {
+                const item = document.createElement('div');
+                item.className = 'source-item';
+                item.dataset.deviceId = device.deviceId;
+                item.innerHTML = `
+                    <div class="source-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <div class="source-info">
+                        <div class="source-name">${device.label || 'Cámara ' + (TeleMaster.videoDevices.indexOf(device) + 1)}</div>
+                        <div class="source-details">Dispositivo de video</div>
+                    </div>
+                `;
+                
+                item.addEventListener('click', () => {
+                    addCameraSource(device.deviceId, device.label || 'Cámara');
+                });
+                
+                list.appendChild(item);
+            });
+            
+            // Agregar fuentes de video existentes
+            TeleMaster.sources.filter(s => s.type === 'video-file' || s.type === 'camera').forEach(source => {
+                const item = document.createElement('div');
+                item.className = 'source-item';
+                item.innerHTML = `
+                    <div class="source-icon">
+                        <i class="fas fa-${getSourceIcon(source.type)}"></i>
+                    </div>
+                    <div class="source-info">
+                        <div class="source-name">${source.name}</div>
+                        <div class="source-details">${source.type === 'camera' ? 'Cámara' : 'Archivo de video'}</div>
+                    </div>
+                `;
+                
+                item.addEventListener('click', () => {
+                    TeleMaster.selectedSource = source;
+                    source.element.classList.add('selected');
+                    updatePropertiesPanel();
+                });
+                
+                list.appendChild(item);
+            });
+        }
+
+        function updateAudioSourcesList() {
+            const list = document.getElementById('audioSourcesList');
+            if (!list) return;
+            
+            list.innerHTML = '';
+            
+            // Agregar dispositivos de audio disponibles
+            TeleMaster.audioDevices.forEach(device => {
+                const item = document.createElement('div');
+                item.className = 'source-item';
+                item.dataset.deviceId = device.deviceId;
+                item.innerHTML = `
+                    <div class="source-icon">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <div class="source-info">
+                        <div class="source-name">${device.label || 'Micrófono ' + (TeleMaster.audioDevices.indexOf(device) + 1)}</div>
+                        <div class="source-details">Dispositivo de audio</div>
+                    </div>
+                `;
+                
+                list.appendChild(item);
+            });
+        }
+
+        // Funciones para agregar fuentes
+        function addCameraSource(deviceId, name) {
+            const sourceId = `source_${Date.now()}`;
+            const source = new Source(sourceId, 'camera', name || 'Cámara', {
+                x: 100,
+                y: 100,
+                width: 640,
+                height: 360
+            });
+            
+            TeleMaster.sources.push(source);
+            TeleMaster.currentScene.addSource(source);
+            
+            const workspace = document.getElementById('workspace');
+            const element = source.createElement();
+            workspace.appendChild(element);
+            
+            source.loadMedia(deviceId);
+            updateVideoSourcesList();
+            showSuccess(`Cámara "${name}" agregada`);
+            
+            closeModal();
+        }
+
+        function addVideoFileSource(file) {
+            const sourceId = `source_${Date.now()}`;
+            const sourceName = file.name.replace(/\.[^/.]+$/, "");
+            
+            const source = new Source(sourceId, 'video-file', sourceName, {
+                x: 100,
+                y: 100,
+                width: 640,
+                height: 360
+            });
+            
+            TeleMaster.sources.push(source);
+            TeleMaster.currentScene.addSource(source);
+            
+            const workspace = document.getElementById('workspace');
+            const element = source.createElement();
+            workspace.appendChild(element);
+            
+            const fileURL = URL.createObjectURL(file);
+            source.loadMedia(fileURL);
+            updateVideoSourcesList();
+            showSuccess(`Video "${sourceName}" agregado`);
+        }
+
+        function addImageSource(file) {
+            const sourceId = `source_${Date.now()}`;
+            const sourceName = file.name.replace(/\.[^/.]+$/, "");
+            
+            const source = new Source(sourceId, 'image', sourceName, {
+                x: 100,
+                y: 100,
+                width: 400,
+                height: 300
+            });
+            
+            TeleMaster.sources.push(source);
+            TeleMaster.currentScene.addSource(source);
+            
+            const workspace = document.getElementById('workspace');
+            const element = source.createElement();
+            workspace.appendChild(element);
+            
+            const fileURL = URL.createObjectURL(file);
+            source.loadMedia(fileURL);
+            showSuccess(`Imagen "${sourceName}" agregada`);
+        }
+
+        function addTextSource() {
+            const sourceId = `source_${Date.now()}`;
+            const text = prompt('Ingrese el texto:', 'Texto de ejemplo');
+            
+            if (!text) return;
+            
+            const source = new Source(sourceId, 'text', `Texto: ${text.substring(0, 20)}...`, {
+                x: 100,
+                y: 100,
+                width: 300,
+                height: 100
+            });
+            
+            TeleMaster.sources.push(source);
+            TeleMaster.currentScene.addSource(source);
+            
+            const workspace = document.getElementById('workspace');
+            const element = source.createElement();
+            workspace.appendChild(element);
+            
+            showSuccess('Texto agregado');
+            closeModal();
+        }
+
+        // Funciones para manejar escenas
+        function addScene(name) {
+            const sceneId = `scene_${Date.now()}`;
+            const sceneName = name || `Escena ${TeleMaster.scenes.length + 1}`;
+            const scene = new Scene(sceneId, sceneName);
+            
+            TeleMaster.scenes.push(scene);
+            
+            if (!TeleMaster.currentScene) {
+                TeleMaster.currentScene = scene;
+            }
+            
+            updateScenesList();
+            showSuccess(`Escena "${sceneName}" creada`);
+            return scene;
+        }
+
+        function updateScenesList() {
+            const list = document.getElementById('scenesList');
+            if (!list) return;
+            
+            list.innerHTML = '';
+            
+            TeleMaster.scenes.forEach(scene => {
+                const item = document.createElement('div');
+                item.className = `scene-item ${scene === TeleMaster.currentScene ? 'active' : ''}`;
+                item.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>${scene.name}</span>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">${scene.sources.length} fuentes</span>
+                    </div>
+                `;
+                
+                item.addEventListener('click', () => {
+                    switchToScene(scene);
+                });
+                
+                list.appendChild(item);
+            });
+        }
+
+        function switchToScene(scene) {
+            TeleMaster.currentScene = scene;
+            
+            // Limpiar workspace
+            const workspace = document.getElementById('workspace');
+            workspace.innerHTML = '';
+            
+            // Agregar fuentes de la escena
+            scene.sources.forEach(source => {
+                if (!source.element) {
+                    source.createElement();
+                }
+                workspace.appendChild(source.element);
+            });
+            
+            updateScenesList();
+            updateSceneSourcesList();
+            
+            document.getElementById('currentProgram').textContent = scene.name;
+            showSuccess(`Cambiado a escena: ${scene.name}`);
+        }
+
+        // Inicialización
+        async function initialize() {
+            // Simular carga
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                document.getElementById('loadingProgress').style.width = `${progress}%`;
+                
+                if (progress >= 20) {
+                    document.getElementById('loadingText').textContent = 'Cargando componentes...';
+                } else if (progress >= 40) {
+                    document.getElementById('loadingText').textContent = 'Inicializando video...';
+                } else if (progress >= 60) {
+                    document.getElementById('loadingText').textContent = 'Cargando dispositivos...';
+                } else if (progress >= 80) {
+                    document.getElementById('loadingText').textContent = 'Preparando interfaz...';
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // Mostrar aplicación
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    document.getElementById('app').style.display = 'flex';
+                    
+                    // Inicializar componentes
+                    setupEventListeners();
+                    loadMediaDevices();
+                    
+                    // Crear escena inicial
+                    const initialScene = addScene('Escena Principal');
+                    switchToScene(initialScene);
+                    
+                    // Iniciar actualización de tiempo
+                    updateTime();
+                    setInterval(updateTime, 1000);
+                    
+                    // Simular estadísticas del sistema
+                    simulateSystemStats();
+                    
+                    showSuccess('TeleMaster Pro inicializado correctamente');
+                }
+            }, 100);
+        }
+
+        function setupEventListeners() {
+            // Tabs de sidebar izquierda
+            document.querySelectorAll('.sidebar-left .tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tab = btn.dataset.tab;
+                    
+                    // Remover active de todos
+                    document.querySelectorAll('.sidebar-left .tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.sidebar-left .tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Activar tab seleccionado
+                    btn.classList.add('active');
+                    document.getElementById(tab).classList.add('active');
+                });
+            });
+            
+            // Tabs de sidebar derecha
+            document.querySelectorAll('.sidebar-right .tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tab = btn.dataset.tab;
+                    
+                    // Remover active de todos
+                    document.querySelectorAll('.sidebar-right .tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.sidebar-right .tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Activar tab seleccionado
+                    btn.classList.add('active');
+                    document.getElementById(tab).classList.add('active');
+                });
+            });
+            
+            // Botones para agregar fuentes
+            document.getElementById('btn-add-video').addEventListener('click', () => openModal('modalAddSource'));
+            document.getElementById('btn-add-audio').addEventListener('click', () => openModal('modalAddSource'));
+            document.getElementById('btn-upload-media').addEventListener('click', () => {
+                document.getElementById('fileUpload').click();
+            });
+            
+            // Tipos de fuente en modal
+            document.querySelectorAll('.source-type').forEach(type => {
+                type.addEventListener('click', () => {
+                    const sourceType = type.dataset.type;
+                    
+                    switch(sourceType) {
+                        case 'camera':
+                            if (TeleMaster.videoDevices.length > 0) {
+                                const device = TeleMaster.videoDevices[0];
+                                addCameraSource(device.deviceId, device.label || 'Cámara');
+                            } else {
+                                showError('No se encontraron cámaras disponibles');
+                            }
+                            break;
+                        case 'image':
+                        case 'video-file':
+                            document.getElementById('fileUpload').click();
+                            break;
+                        case 'text':
+                            addTextSource();
+                            break;
+                        case 'microphone':
+                            showSuccess('Funcionalidad de micrófono en desarrollo');
+                            break;
+                        case 'browser':
+                            showSuccess('Funcionalidad de navegador en desarrollo');
+                            break;
+                    }
+                });
+            });
+            
+            // Cerrar modales
+            document.getElementById('closeAddSource').addEventListener('click', closeModal);
+            document.getElementById('closeSourceSettings').addEventListener('click', closeModal);
+            
+            // Cerrar modal al hacer clic fuera
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
+            });
+            
+            // Subida de archivos
+            document.getElementById('fileUpload').addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                
+                files.forEach(file => {
+                    const fileType = file.type.split('/')[0];
+                    
+                    if (fileType === 'video') {
+                        addVideoFileSource(file);
+                    } else if (fileType === 'image') {
+                        addImageSource(file);
+                    } else {
+                        showError(`Tipo de archivo no soportado: ${file.type}`);
+                    }
+                });
+                
+                // Limpiar input
+                e.target.value = '';
+            });
+            
+            // Herramientas del editor
+            document.querySelectorAll('[data-tool]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-tool]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    TeleMaster.currentTool = btn.dataset.tool;
+                });
+            });
+            
+            // Controles de posición y tamaño
+            document.getElementById('posX').addEventListener('change', (e) => {
+                if (TeleMaster.selectedSource) {
+                    TeleMaster.selectedSource.x = parseInt(e.target.value) || 0;
+                    TeleMaster.selectedSource.updatePosition();
+                }
+            });
+            
+            document.getElementById('posY').addEventListener('change', (e) => {
+                if (TeleMaster.selectedSource) {
+                    TeleMaster.selectedSource.y = parseInt(e.target.value) || 0;
+                    TeleMaster.selectedSource.updatePosition();
+                }
+            });
+            
+            document.getElementById('width').addEventListener('change', (e) => {
+                if (TeleMaster.selectedSource) {
+                    TeleMaster.selectedSource.width = parseInt(e.target.value) || 100;
+                    TeleMaster.selectedSource.updateSize();
+                }
+            });
+            
+            document.getElementById('height').addEventListener('change', (e) => {
+                if (TeleMaster.selectedSource) {
+                    TeleMaster.selectedSource.height = parseInt(e.target.value) || 100;
+                    TeleMaster.selectedSource.updateSize();
+                }
+            });
+            
+            document.getElementById('rotation').addEventListener('input', (e) => {
+                if (TeleMaster.selectedSource) {
+                    TeleMaster.selectedSource.rotation = parseInt(e.target.value) || 0;
+                    TeleMaster.selectedSource.updateRotation();
+                    document.getElementById('rotationValue').textContent = `${TeleMaster.selectedSource.rotation}°`;
+                }
+            });
+            
+            document.getElementById('opacity').addEventListener('input', (e) => {
+                if (TeleMaster.selectedSource) {
+                    TeleMaster.selectedSource.opacity = parseInt(e.target.value) || 100;
+                    TeleMaster.selectedSource.updateOpacity();
+                    document.getElementById('opacityValue').textContent = `${TeleMaster.selectedSource.opacity}%`;
+                }
+            });
+            
+            // Propiedades en sidebar derecha
+            document.getElementById('propPosX').addEventListener('change', (e) => {
+                if (TeleMaster.selectedSource) {
+                    TeleMaster.selectedSource.x = parseInt(e.target.value) || 0;
+                    TeleMaster.selectedSource.updatePosition();
+                    document.getElementById('posX').value = TeleMaster.selectedSource.x;
+                }
+            });
+            
+            document.getElementById('propPosY').addEventListener('change', (e) => {
+                if (TeleMaster.selectedSource) {
+                    TeleMaster.selectedSource.y = parseInt(e.target.value) || 0;
+                    TeleMaster.selectedSource.updatePosition();
+                    document.getElementById('posY').value = TeleMaster.selectedSource.y;
+                }
+            });
+            
+            document.getElementById('propWidth').addEventListener('change', (e) => {
+                if (TeleMaster.selectedSource) {
+                    TeleMaster.selectedSource.width = parseInt(e.target.value) || 100;
+                    TeleMaster.selectedSource.updateSize();
+                    document.getElementById('width').value = TeleMaster.selectedSource.width;
+                }
+            });
+            
+            document.getElementById('propHeight').addEventListener('change', (e) => {
+                if (TeleMaster.selectedSource) {
+                    TeleMaster.selectedSource.height = parseInt(e.target.value) || 100;
+                    TeleMaster.selectedSource.updateSize();
+                    document.getElementById('height').value = TeleMaster.selectedSource.height;
+                }
+            });
+            
+            document.getElementById('propRotation').addEventListener('input', (e) => {
+                if (TeleMaster.selectedSource) {
+                    TeleMaster.selectedSource.rotation = parseInt(e.target.value) || 0;
+                    TeleMaster.selectedSource.updateRotation();
+                    document.getElementById('rotation').value = TeleMaster.selectedSource.rotation;
+                    document.getElementById('rotationValue').textContent = `${TeleMaster.selectedSource.rotation}°`;
+                }
+            });
+            
+            document.getElementById('propOpacity').addEventListener('input', (e) => {
+                if (TeleMaster.selectedSource) {
+                    TeleMaster.selectedSource.opacity = parseInt(e.target.value) || 100;
+                    TeleMaster.selectedSource.updateOpacity();
+                    document.getElementById('opacity').value = TeleMaster.selectedSource.opacity;
+                    document.getElementById('opacityValue').textContent = `${TeleMaster.selectedSource.opacity}%`;
+                }
+            });
+            
+            // Efectos
+            document.getElementById('propBrightness').addEventListener('input', (e) => {
+                if (TeleMaster.selectedSource && TeleMaster.selectedSource.mediaElement) {
+                    const value = parseInt(e.target.value) || 100;
+                    TeleMaster.selectedSource.filters.brightness = value;
+                    TeleMaster.selectedSource.mediaElement.style.filter = 
+                        `brightness(${value}%) contrast(${TeleMaster.selectedSource.filters.contrast}%) saturate(${TeleMaster.selectedSource.filters.saturation}%)`;
+                }
+            });
+            
+            document.getElementById('propContrast').addEventListener('input', (e) => {
+                if (TeleMaster.selectedSource && TeleMaster.selectedSource.mediaElement) {
+                    const value = parseInt(e.target.value) || 100;
+                    TeleMaster.selectedSource.filters.contrast = value;
+                    TeleMaster.selectedSource.mediaElement.style.filter = 
+                        `brightness(${TeleMaster.selectedSource.filters.brightness}%) contrast(${value}%) saturate(${TeleMaster.selectedSource.filters.saturation}%)`;
+                }
+            });
+            
+            document.getElementById('propSaturation').addEventListener('input', (e) => {
+                if (TeleMaster.selectedSource && TeleMaster.selectedSource.mediaElement) {
+                    const value = parseInt(e.target.value) || 100;
+                    TeleMaster.selectedSource.filters.saturation = value;
+                    TeleMaster.selectedSource.mediaElement.style.filter = 
+                        `brightness(${TeleMaster.selectedSource.filters.brightness}%) contrast(${TeleMaster.selectedSource.filters.contrast}%) saturate(${value}%)`;
+                }
+            });
+            
+            // Escenas
+            document.getElementById('btn-add-scene').addEventListener('click', () => {
+                const name = prompt('Nombre de la nueva escena:', `Escena ${TeleMaster.scenes.length + 1}`);
+                if (name) {
+                    addScene(name);
+                }
+            });
+            
+            document.getElementById('btn-duplicate-scene').addEventListener('click', () => {
+                if (TeleMaster.currentScene) {
+                    const newScene = addScene(`${TeleMaster.currentScene.name} (copia)`);
+                    // Copiar fuentes
+                    TeleMaster.currentScene.sources.forEach(source => {
+                        // Esto sería una copia profunda en una implementación real
+                        newScene.addSource(source);
+                    });
+                    showSuccess('Escena duplicada');
+                }
+            });
+            
+            // Transiciones
+            document.getElementById('btn-cut').addEventListener('click', () => {
+                showSuccess('Transición: Corte');
+            });
+            
+            document.getElementById('btn-fade').addEventListener('click', () => {
+                showSuccess('Transición: Fundido');
+            });
+            
+            document.getElementById('btn-auto').addEventListener('click', () => {
+                showSuccess('Transición: Auto');
+            });
+            
+            // Stream y grabación
+            document.getElementById('btn-start-stream').addEventListener('click', () => {
+                TeleMaster.streamActive = true;
+                document.getElementById('btn-start-stream').disabled = true;
+                document.getElementById('btn-stop-stream').disabled = false;
+                document.getElementById('status-stream').classList.add('active');
+                showSuccess('Transmisión iniciada', 'success');
+            });
+            
+            document.getElementById('btn-stop-stream').addEventListener('click', () => {
+                TeleMaster.streamActive = false;
+                document.getElementById('btn-start-stream').disabled = false;
+                document.getElementById('btn-stop-stream').disabled = true;
+                document.getElementById('status-stream').classList.remove('active');
+                showSuccess('Transmisión detenida', 'warning');
+            });
+            
+            document.getElementById('btn-start-recording').addEventListener('click', () => {
+                TeleMaster.recordingActive = !TeleMaster.recordingActive;
+                const btn = document.getElementById('btn-start-recording');
+                
+                if (TeleMaster.recordingActive) {
+                    btn.innerHTML = '<i class="fas fa-stop"></i><span>DETENER GRAB.</span>';
+                    btn.classList.add('stop-btn');
+                    document.getElementById('status-record').classList.add('active');
+                    showSuccess('Grabación iniciada', 'success');
+                } else {
+                    btn.innerHTML = '<i class="fas fa-circle"></i><span>GRABAR</span>';
+                    btn.classList.remove('stop-btn');
+                    document.getElementById('status-record').classList.remove('active');
+                    showSuccess('Grabación detenida', 'warning');
+                }
+            });
+            
+            // Controles maestros
+            document.getElementById('btn-emergency').addEventListener('click', () => {
+                if (confirm('¿Activar modo emergencia? Esto detendrá la transmisión.')) {
+                    TeleMaster.streamActive = false;
+                    document.getElementById('btn-start-stream').disabled = false;
+                    document.getElementById('btn-stop-stream').disabled = true;
+                    document.getElementById('status-stream').classList.remove('active');
+                    showWarning('Modo emergencia activado');
+                }
+            });
+            
+            document.getElementById('btn-blackout').addEventListener('click', () => {
+                showSuccess('Blackout activado');
+            });
+            
+            document.getElementById('btn-freeze').addEventListener('click', () => {
+                showSuccess('Freeze activado');
+            });
+            
+            // Zoom
+            document.getElementById('zoomLevel').addEventListener('change', (e) => {
+                TeleMaster.zoomLevel = parseFloat(e.target.value);
+                updateZoom();
+            });
+            
+            document.getElementById('btn-zoom-in').addEventListener('click', () => {
+                const select = document.getElementById('zoomLevel');
+                const currentIndex = select.selectedIndex;
+                if (currentIndex < select.options.length - 1) {
+                    select.selectedIndex = currentIndex + 1;
+                    TeleMaster.zoomLevel = parseFloat(select.value);
+                    updateZoom();
+                }
+            });
+            
+            document.getElementById('btn-zoom-out').addEventListener('click', () => {
+                const select = document.getElementById('zoomLevel');
+                const currentIndex = select.selectedIndex;
+                if (currentIndex > 0) {
+                    select.selectedIndex = currentIndex - 1;
+                    TeleMaster.zoomLevel = parseFloat(select.value);
+                    updateZoom();
+                }
+            });
+            
+            document.getElementById('btn-fit-to-screen').addEventListener('click', () => {
+                document.getElementById('zoomLevel').value = '1';
+                TeleMaster.zoomLevel = 1;
+                updateZoom();
+            });
+            
+            // Click en workspace para deseleccionar
+            document.getElementById('workspace').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('workspace')) {
+                    if (TeleMaster.selectedSource) {
+                        TeleMaster.selectedSource.element.classList.remove('selected');
+                        TeleMaster.selectedSource = null;
+                        updatePropertiesPanel();
+                    }
+                }
+            });
+        }
+
+        function updateZoom() {
+            const workspace = document.getElementById('workspace');
+            if (workspace) {
+                workspace.style.transform = `scale(${TeleMaster.zoomLevel})`;
+                workspace.style.transformOrigin = 'top left';
+            }
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('es-ES', { hour12: false });
+            document.getElementById('currentTime').textContent = timeString;
+        }
+
+        function simulateSystemStats() {
+            setInterval(() => {
+                // CPU
+                const cpu = Math.floor(Math.random() * 30) + 5;
+                document.getElementById('cpuUsage').textContent = `${cpu}%`;
+                document.getElementById('streamCpu').textContent = `${cpu}%`;
+                
+                // Memoria
+                const memory = Math.floor(Math.random() * 40) + 20;
+                document.getElementById('memoryUsage').textContent = `${memory}%`;
+                
+                // Red
+                const network = TeleMaster.streamActive ? 
+                    (Math.floor(Math.random() * 5000) + 1000) : 
+                    (Math.floor(Math.random() * 100));
+                document.getElementById('networkUsage').textContent = `${network} kb/s`;
+                
+                // Bitrate del stream
+                const bitrate = TeleMaster.streamActive ? 
+                    (Math.random() * 4 + 2).toFixed(1) : '0';
+                document.getElementById('streamBitrate').textContent = `${bitrate} Mbps`;
+                
+                // FPS
+                const fps = TeleMaster.streamActive ? 
+                    Math.floor(Math.random() * 10) + 25 : 0;
+                document.getElementById('streamFps').textContent = fps;
+                
+                // Frames dropped
+                const dropped = TeleMaster.streamActive ? 
+                    Math.floor(Math.random() * 5) : 0;
+                document.getElementById('streamDropped').textContent = dropped;
+                
+                // Estado del servidor
+                const serverStatus = document.getElementById('status-server');
+                serverStatus.classList.toggle('active', Math.random() > 0.1);
+            }, 2000);
+        }
+
+        // Iniciar la aplicación cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', initialize);
+    </script>
 </body>
 </html>

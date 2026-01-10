@@ -4,20 +4,1722 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TeleMaster Pro - Sistema de Transmisión Profesional</title>
-    <link rel="stylesheet" href="src/css/main.css">
-    <link rel="stylesheet" href="src/css/components.css">
-    <link rel="stylesheet" href="src/css/modals.css">
-    <link rel="stylesheet" href="src/css/responsive.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== VARIABLES Y ESTILOS GLOBALES ===== */
+        :root {
+            /* Colores principales */
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2c3e50;
+            --secondary-light: #34495e;
+            --accent-color: #e74c3c;
+            --accent-light: #ff6b6b;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            
+            /* Fondos */
+            --dark-bg: #0f1520;
+            --dark-bg-light: #1a2332;
+            --dark-bg-lighter: #243142;
+            --dark-bg-card: #1e2a3a;
+            
+            /* Textos */
+            --text-color: #ecf0f1;
+            --text-muted: #95a5a6;
+            --text-light: #bdc3c7;
+            
+            /* Bordes */
+            --border-color: #2c3e50;
+            --border-light: #34495e;
+            
+            /* Sombras */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.3);
+            --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.3);
+            
+            /* Transiciones */
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+            
+            /* Radio de bordes */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            
+            /* Espaciado */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            
+            /* Breakpoints para responsive */
+            --breakpoint-sm: 576px;
+            --breakpoint-md: 768px;
+            --breakpoint-lg: 992px;
+            --breakpoint-xl: 1200px;
+            --breakpoint-xxl: 1400px;
+        }
+
+        /* Reset y estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Estilos de scroll personalizados */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg-light);
+            border-radius: var(--radius-sm);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary-light);
+            border-radius: var(--radius-sm);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+
+        /* ===== PANTALLA DE CARGA ===== */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-bg-light) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity var(--transition-slow);
+        }
+
+        .loading-content {
+            text-align: center;
+            max-width: 500px;
+            padding: var(--space-xl);
+        }
+
+        .loading-logo {
+            margin-bottom: var(--space-xl);
+            animation: pulse 2s infinite;
+        }
+
+        .loading-logo i {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: var(--space-md);
+        }
+
+        .loading-logo h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: var(--space-xs);
+        }
+
+        .loading-logo .subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .loading-progress {
+            width: 100%;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: var(--dark-bg-lighter);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: var(--space-md);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-light));
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 3px;
+        }
+
+        .loading-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            height: 1.2rem;
+            transition: color var(--transition-normal);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== CONTENEDOR PRINCIPAL ===== */
+        .app-container {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* ===== HEADER ===== */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--dark-bg-card);
+            padding: var(--space-sm) var(--space-md);
+            border-bottom: 1px solid var(--border-color);
+            height: 60px;
+            min-height: 60px;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            z-index: 100;
+        }
+
+        .header-left, .header-center, .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            user-select: none;
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            animation: spin 20s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-version {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            padding: 2px 6px;
+            background: var(--dark-bg-light);
+            border-radius: var(--radius-sm);
+            margin-left: var(--space-xs);
+        }
+
+        /* Botones del header */
+        .header-controls {
+            display: flex;
+            gap: var(--space-xs);
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background-color: var(--dark-bg-light);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .header-btn:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Display de tiempo y programa */
+        .time-display, .program-display {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-xs) var(--space-sm);
+            background-color: var(--dark-bg-light);
+            border-radius: var(--radius-sm);
+        }
+
+        .time-display i {
+            color: var(--primary-color);
+        }
+
+        #currentTime {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .program-display {
+            background: linear-gradient(90deg, var(--dark-bg-light), var(--dark-bg-card));
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .program-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .program-name {
+            font-weight: 700;
+            color: var(--primary-color);
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Indicadores de estado */
+        .status-indicators {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--text-muted);
+            transition: all var(--transition-normal);
+        }
+
+        .status-dot.active {
+            background-color: var(--success-color);
+            box-shadow: 0 0 8px var(--success-color);
+        }
+
+        .status-dot.warning {
+            background-color: var(--warning-color);
+            box-shadow: 0 0 8px var(--warning-color);
+        }
+
+        .status-dot.error {
+            background-color: var(--danger-color);
+            box-shadow: 0 0 8px var(--danger-color);
+        }
+
+        /* Estadísticas del sistema */
+        .system-stats {
+            display: flex;
+            gap: var(--space-lg);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-size: 0.85rem;
+        }
+
+        .stat-item i {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        /* ===== ÁREA PRINCIPAL ===== */
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ===== SIDEBAR IZQUIERDA ===== */
+        .sidebar-left {
+            width: 280px;
+            background-color: var(--dark-bg-card);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: width var(--transition-normal);
+            flex-shrink: 0;
+        }
+
+        /* Pestañas del sidebar */
+        .sidebar-tabs {
+            display: flex;
+            background-color: var(--dark-bg-light);
+            padding: var(--space-sm);
+            gap: var(--space-xs);
+        }
+
+        .tab-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xs);
+            padding: var(--space-sm) 0;
+            background-color: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+            min-height: 60px;
+        }
+
+        .tab-btn:hover {
+            background-color: var(--dark-bg-lighter);
+            color: var(--text-color);
+        }
+
+        .tab-btn.active {
+            background-color: var(--dark-bg-card);
+            color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tab-btn i {
+            font-size: 1.2rem;
+        }
+
+        .tab-btn span {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Contenido de pestañas */
+        .tab-content {
+            flex: 1;
+            padding: var(--space-md);
+            overflow-y: auto;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Encabezado de fuentes */
+        .sources-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sources-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        /* Botones de icono */
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .icon-btn:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: rotate(15deg);
+        }
+
+        /* Lista de fuentes */
+        .sources-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            overflow-y: auto;
+        }
+
+        .source-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm);
+            background-color: var(--dark-bg-light);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: 1px solid transparent;
+            position: relative;
+        }
+
+        .source-item:hover {
+            border-color: var(--primary-color);
+            transform: translateX(2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .source-item.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .source-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .source-item.selected::after {
+            opacity: 1;
+        }
+
+        .source-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--dark-bg), var(--dark-bg-lighter));
+            border-radius: var(--radius-sm);
+            flex-shrink: 0;
+        }
+
+        .source-icon i {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .source-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .source-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .source-details {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .source-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--success-color);
+            margin-left: var(--space-xs);
+        }
+
+        /* Pie de fuente */
+        .sources-footer {
+            margin-top: auto;
+        }
+
+        .btn-add-source {
+            width: 100%;
+            padding: var(--space-sm);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            border: none;
+            color: var(--text-color);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            transition: all var(--transition-fast);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .btn-add-source:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-add-source:active {
+            transform: translateY(0);
+        }
+
+        /* ===== ÁREA CENTRAL - MULTIVISOR ===== */
+        .main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: var(--space-md);
+            gap: var(--space-md);
+            overflow: hidden;
+        }
+
+        /* Barra de herramientas del multivisor */
+        .multiviewer-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--dark-bg-card);
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toolbar-left, .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        /* Selector de layout */
+        .layout-selector {
+            display: flex;
+            gap: var(--space-xs);
+        }
+
+        .layout-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--dark-bg-light);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .layout-btn:hover {
+            background-color: var(--dark-bg-lighter);
+        }
+
+        .layout-btn.active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .multiviewer-controls {
+            display: flex;
+            gap: var(--space-xs);
+        }
+
+        /* Display de resolución y FPS */
+        .resolution-display, .fps-display {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-xs) var(--space-sm);
+            background-color: var(--dark-bg-light);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+        }
+
+        .resolution-display i, .fps-display i {
+            color: var(--primary-color);
+        }
+
+        #currentFps {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* Contenedor del multivisor */
+        .multiviewer-container {
+            flex: 1;
+            background-color: #000;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Grid del multivisor */
+        .multiviewer-grid {
+            display: grid;
+            width: 100%;
+            height: 100%;
+            gap: 2px;
+            padding: 2px;
+            background-color: var(--dark-bg);
+        }
+
+        .multiviewer-grid.layout-2x2 {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+        }
+
+        .multiviewer-grid.layout-1plus3 {
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: repeat(3, 1fr);
+        }
+
+        .multiviewer-grid.layout-1plus3 .viewport:nth-child(1) {
+            grid-row: span 3;
+        }
+
+        .multiviewer-grid.layout-1plus1 {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr;
+        }
+
+        .multiviewer-grid.layout-full {
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+        }
+
+        /* Viewport individual */
+        .viewport {
+            position: relative;
+            background-color: var(--dark-bg-light);
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all var(--transition-fast);
+        }
+
+        .viewport:hover {
+            border-color: var(--primary-color);
+        }
+
+        .viewport.active {
+            border-color: var(--primary-color);
+            box-shadow: inset 0 0 0 2px var(--primary-color);
+        }
+
+        .viewport-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, rgba(0,0,0,0.8), transparent);
+            color: white;
+            padding: var(--space-xs) var(--space-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .viewport-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .viewport.preview .viewport-label {
+            background: linear-gradient(90deg, rgba(52, 152, 219, 0.8), transparent);
+        }
+
+        .viewport.program .viewport-label {
+            background: linear-gradient(90deg, rgba(46, 204, 113, 0.8), transparent);
+        }
+
+        /* Controles de transición */
+        .transition-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--dark-bg-card);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .transition-selector {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .transition-selector select {
+            background-color: var(--dark-bg-light);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: var(--space-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            min-width: 120px;
+        }
+
+        .transition-duration {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .transition-duration input[type="range"] {
+            width: 100px;
+        }
+
+        #durationValue {
+            min-width: 40px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .transition-buttons {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .transition-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all var(--transition-fast);
+        }
+
+        .transition-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .transition-btn:active {
+            transform: translateY(0);
+        }
+
+        .cut-btn {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .auto-btn {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .fade-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .stinger-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-light));
+            color: white;
+        }
+
+        /* ===== SIDEBAR DERECHA ===== */
+        .sidebar-right {
+            width: 320px;
+            background-color: var(--dark-bg-card);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: width var(--transition-normal);
+            flex-shrink: 0;
+        }
+
+        /* Encabezado de escenas */
+        .scenes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .scenes-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .scene-actions {
+            display: flex;
+            gap: var(--space-xs);
+        }
+
+        /* Lista de escenas */
+        .scenes-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            overflow-y: auto;
+        }
+
+        .scene-item {
+            padding: var(--space-sm);
+            background-color: var(--dark-bg-light);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+
+        .scene-item:hover {
+            background-color: var(--dark-bg-lighter);
+            transform: translateX(-2px);
+        }
+
+        .scene-item.active {
+            border-left-color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .scene-item-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            margin-bottom: var(--space-xs);
+        }
+
+        .scene-item-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .scene-item-sources {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        /* Fuentes de escena */
+        .scene-sources {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .scene-sources h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: var(--space-sm);
+            padding-bottom: var(--space-xs);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sources-tree {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .tree-item {
+            padding: var(--space-xs) var(--space-sm);
+            margin-bottom: var(--space-xs);
+            background-color: var(--dark-bg-light);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .tree-item:hover {
+            background-color: var(--dark-bg-lighter);
+        }
+
+        .tree-item i {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        /* ===== FOOTER ===== */
+        .app-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--dark-bg-card);
+            padding: var(--space-sm) var(--space-md);
+            border-top: 1px solid var(--border-color);
+            height: 70px;
+            min-height: 70px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .footer-left, .footer-center, .footer-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        /* Controles de stream */
+        .stream-controls {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .stream-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all var(--transition-fast);
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .stream-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stream-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .stream-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #btn-start-stream {
+            background: linear-gradient(135deg, var(--success-color), #27ae60);
+            color: white;
+        }
+
+        #btn-stop-stream {
+            background: linear-gradient(135deg, var(--danger-color), #c0392b);
+            color: white;
+        }
+
+        #btn-start-recording {
+            background: linear-gradient(135deg, var(--accent-color), #e74c3c);
+            color: white;
+        }
+
+        /* Información de broadcast */
+        .broadcast-info {
+            display: flex;
+            gap: var(--space-lg);
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* Controles maestros */
+        .master-controls {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .master-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            background-color: var(--dark-bg-light);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all var(--transition-fast);
+        }
+
+        .master-btn:hover {
+            background-color: var(--dark-bg-lighter);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .master-btn:active {
+            transform: translateY(0);
+        }
+
+        .emergency-btn {
+            background: linear-gradient(135deg, var(--danger-color), #c0392b);
+            color: white;
+            border: none;
+        }
+
+        /* ===== MODALES ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn var(--transition-normal);
+        }
+
+        .modal-content {
+            background-color: var(--dark-bg-card);
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            animation: slideUp var(--transition-normal);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-md) var(--space-lg);
+            background-color: var(--dark-bg-light);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .modal-body {
+            padding: var(--space-lg);
+            overflow-y: auto;
+            max-height: 60vh;
+        }
+
+        /* Tipos de fuente */
+        .source-types {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+        }
+
+        .source-type {
+            padding: var(--space-lg);
+            background-color: var(--dark-bg-light);
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: 2px solid transparent;
+        }
+
+        .source-type:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .source-type i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: var(--space-md);
+        }
+
+        .source-type h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: var(--space-xs);
+        }
+
+        .source-type p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== NOTIFICACIONES ===== */
+        .notification-container {
+            position: fixed;
+            bottom: var(--space-md);
+            right: var(--space-md);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            max-width: 350px;
+        }
+
+        .notification {
+            background-color: var(--dark-bg-card);
+            border-left: 4px solid var(--primary-color);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            animation: slideInRight var(--transition-normal);
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.success {
+            border-left-color: var(--success-color);
+        }
+
+        .notification.error {
+            border-left-color: var(--danger-color);
+        }
+
+        .notification.warning {
+            border-left-color: var(--warning-color);
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-xs);
+        }
+
+        .notification-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: var(--space-xs);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .notification-close:hover {
+            background-color: var(--dark-bg-light);
+            color: var(--text-color);
+        }
+
+        .notification-message {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        
+        /* Pantallas grandes (desktop) */
+        @media (min-width: 1200px) {
+            .sidebar-left {
+                width: 300px;
+            }
+            .sidebar-right {
+                width: 350px;
+            }
+        }
+
+        /* Tablets en horizontal */
+        @media (max-width: 1199px) {
+            .sidebar-left, .sidebar-right {
+                width: 260px;
+            }
+            
+            .multiviewer-toolbar .toolbar-left,
+            .multiviewer-toolbar .toolbar-right {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-sm);
+            }
+            
+            .broadcast-info {
+                gap: var(--space-md);
+            }
+        }
+
+        /* Tablets en vertical */
+        @media (max-width: 991px) {
+            .app-header {
+                flex-wrap: wrap;
+                height: auto;
+                min-height: 80px;
+                padding: var(--space-sm);
+            }
+            
+            .header-left, .header-center, .header-right {
+                flex: 1 0 100%;
+                justify-content: center;
+                margin-bottom: var(--space-sm);
+            }
+            
+            .header-center, .header-right {
+                margin-bottom: 0;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar-left, .sidebar-right {
+                width: 100%;
+                height: 200px;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .sidebar-right {
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+                order: 3;
+            }
+            
+            .main-area {
+                order: 2;
+                height: 500px;
+            }
+            
+            .app-footer {
+                flex-wrap: wrap;
+                height: auto;
+                min-height: 100px;
+                padding: var(--space-sm);
+            }
+            
+            .footer-left, .footer-center, .footer-right {
+                flex: 1 0 100%;
+                justify-content: center;
+                margin-bottom: var(--space-sm);
+            }
+            
+            .footer-center, .footer-right {
+                margin-bottom: 0;
+            }
+        }
+
+        /* Teléfonos grandes */
+        @media (max-width: 767px) {
+            .logo-text {
+                font-size: 1rem;
+            }
+            
+            .logo-version {
+                display: none;
+            }
+            
+            .header-btn span {
+                display: none;
+            }
+            
+            .header-btn {
+                width: 40px;
+                justify-content: center;
+            }
+            
+            .system-stats {
+                gap: var(--space-md);
+            }
+            
+            .status-item span {
+                display: none;
+            }
+            
+            .source-types {
+                grid-template-columns: 1fr;
+            }
+            
+            .stream-btn {
+                min-width: 100px;
+                font-size: 0.8rem;
+            }
+            
+            .stream-btn span {
+                display: none;
+            }
+            
+            .master-btn span {
+                display: none;
+            }
+            
+            .transition-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .transition-btn {
+                flex: 1;
+                min-width: 80px;
+                justify-content: center;
+            }
+        }
+
+        /* Teléfonos pequeños */
+        @media (max-width: 575px) {
+            .loading-logo h1 {
+                font-size: 1.8rem;
+            }
+            
+            .loading-logo i {
+                font-size: 3rem;
+            }
+            
+            .multiviewer-grid.layout-2x2 {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(4, 1fr);
+            }
+            
+            .multiviewer-grid.layout-1plus3 {
+                grid-template-columns: 1fr;
+                grid-template-rows: 2fr repeat(3, 1fr);
+            }
+            
+            .multiviewer-grid.layout-1plus3 .viewport:nth-child(1) {
+                grid-row: span 1;
+            }
+            
+            .multiviewer-grid.layout-1plus1 {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(2, 1fr);
+            }
+            
+            .transition-controls {
+                flex-direction: column;
+                gap: var(--space-md);
+            }
+            
+            .transition-selector {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+            
+            .broadcast-info {
+                flex-wrap: wrap;
+                gap: var(--space-sm);
+            }
+            
+            .info-item {
+                flex: 1 0 calc(50% - var(--space-sm));
+            }
+            
+            .notification-container {
+                left: var(--space-sm);
+                right: var(--space-sm);
+                max-width: none;
+            }
+        }
+
+        /* Pantallas muy pequeñas */
+        @media (max-width: 375px) {
+            .tab-btn span {
+                display: none;
+            }
+            
+            .tab-btn {
+                min-height: 50px;
+            }
+            
+            .source-name {
+                font-size: 0.8rem;
+            }
+            
+            .source-details {
+                display: none;
+            }
+            
+            .stream-controls, .master-controls {
+                gap: var(--space-xs);
+            }
+            
+            .stream-btn, .master-btn {
+                padding: var(--space-xs) var(--space-sm);
+            }
+        }
+
+        /* Modo retrato/vertical */
+        @media (max-height: 700px) {
+            .sidebar-left, .sidebar-right {
+                height: 150px;
+            }
+            
+            .main-area {
+                height: 400px;
+            }
+            
+            .viewport-label {
+                font-size: 0.7rem;
+                padding: 2px 6px;
+            }
+            
+            .app-footer {
+                height: 60px;
+                min-height: 60px;
+            }
+        }
+
+        /* Altura muy baja */
+        @media (max-height: 500px) {
+            .app-header {
+                height: 50px;
+                min-height: 50px;
+            }
+            
+            .sidebar-left, .sidebar-right {
+                height: 120px;
+            }
+            
+            .main-area {
+                height: 300px;
+            }
+            
+            .tab-btn {
+                min-height: 40px;
+                padding: 4px 0;
+            }
+            
+            .tab-btn i {
+                font-size: 1rem;
+            }
+            
+            .app-footer {
+                height: 50px;
+                min-height: 50px;
+            }
+        }
+
+        /* Orientación horizontal forzada en móviles */
+        @media (max-width: 991px) and (orientation: landscape) {
+            .main-content {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .sidebar-left {
+                width: 200px;
+                height: 100%;
+                order: 1;
+            }
+            
+            .main-area {
+                flex: 1;
+                height: 100%;
+                order: 2;
+            }
+            
+            .sidebar-right {
+                width: 200px;
+                height: 100%;
+                order: 3;
+            }
+            
+            .app-footer {
+                order: 4;
+                width: 100%;
+            }
+        }
+
+        /* Soporte para modo oscuro del sistema */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --dark-bg: #0a0f1a;
+                --dark-bg-light: #151a2a;
+                --dark-bg-lighter: #1e2438;
+                --border-color: #2a3042;
+            }
+        }
+
+        /* Soporte para modo claro (opcional) */
+        @media (prefers-color-scheme: light) {
+            :root {
+                --dark-bg: #f5f7fa;
+                --dark-bg-light: #eef1f5;
+                --dark-bg-lighter: #e4e8f0;
+                --dark-bg-card: #ffffff;
+                --text-color: #2c3e50;
+                --text-muted: #7f8c8d;
+                --border-color: #dce1e6;
+            }
+        }
+
+        /* Ajustes para pantallas táctiles */
+        @media (hover: none) and (pointer: coarse) {
+            .header-btn:hover, .tab-btn:hover, .source-item:hover,
+            .stream-btn:hover, .master-btn:hover, .transition-btn:hover {
+                transform: none;
+            }
+            
+            .icon-btn, .layout-btn {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            select, input, button {
+                font-size: 16px; /* Previene zoom en iOS */
+            }
+        }
+
+        /* Impresión */
+        @media print {
+            .loading-screen, .app-footer, .sidebar-left, .sidebar-right,
+            .multiviewer-toolbar, .transition-controls {
+                display: none !important;
+            }
+            
+            .main-area {
+                height: auto;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Pantalla de carga inicial -->
+    <!-- Pantalla de carga -->
     <div id="loadingScreen" class="loading-screen">
         <div class="loading-content">
             <div class="loading-logo">
                 <i class="fas fa-tower-broadcast"></i>
                 <h1>TeleMaster Pro</h1>
+                <div class="subtitle">Sistema de Transmisión Profesional</div>
             </div>
             <div class="loading-progress">
                 <div class="progress-bar">
@@ -28,423 +1730,1190 @@
         </div>
     </div>
 
-    <!-- Aquí se cargará dinámicamente la interfaz -->
-    <div id="appContainer"></div>
+    <!-- Contenedor principal -->
+    <div id="app" class="app-container">
+        <!-- HEADER -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-tower-broadcast logo-icon"></i>
+                    <span class="logo-text">TeleMaster Pro</span>
+                    <span class="logo-version">v1.0.0</span>
+                </div>
+                
+                <div class="header-controls">
+                    <button class="header-btn" id="btn-settings" title="Configuración">
+                        <i class="fas fa-cog"></i>
+                        <span>Configuración</span>
+                    </button>
+                    <button class="header-btn" id="btn-outputs" title="Salidas">
+                        <i class="fas fa-plug"></i>
+                        <span>Salidas</span>
+                    </button>
+                    <button class="header-btn" id="btn-broadcast" title="Transmisión">
+                        <i class="fas fa-satellite-dish"></i>
+                        <span>Transmisión</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="header-center">
+                <div class="time-display">
+                    <i class="fas fa-clock"></i>
+                    <span id="currentTime">--:--:--</span>
+                </div>
+                
+                <div class="program-display">
+                    <span class="program-label">PROGRAM:</span>
+                    <span id="currentProgram" class="program-name">Sin señal</span>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="status-indicators">
+                    <div class="status-item">
+                        <div class="status-dot" id="status-stream"></div>
+                        <span>STREAM</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-dot" id="status-record"></div>
+                        <span>REC</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-dot" id="status-server"></div>
+                        <span>SERVIDOR</span>
+                    </div>
+                </div>
+                
+                <div class="system-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-microchip"></i>
+                        <span id="cpuUsage">0%</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-memory"></i>
+                        <span id="memoryUsage">0%</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-network-wired"></i>
+                        <span id="networkUsage">0kb/s</span>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-    <!-- Scripts principales -->
-    <script src="src/js/utils.js"></script>
-    <script src="src/js/api.js"></script>
-    <script src="src/js/hardware.js"></script>
-    <script src="src/js/audio.js"></script>
-    <script src="src/js/scenes.js"></script>
-    <script src="src/js/transitions.js"></script>
-    <script src="src/js/multiviewer.js"></script>
-    <script src="src/js/streaming.js"></script>
-    <script src="src/js/main.js"></script>
+        <!-- ÁREA PRINCIPAL -->
+        <main class="main-content">
+            <!-- SIDEBAR IZQUIERDA - FUENTES -->
+            <aside class="sidebar-left">
+                <!-- Pestañas de fuentes -->
+                <div class="sidebar-tabs">
+                    <button class="tab-btn active" data-tab="video-sources">
+                        <i class="fas fa-video"></i>
+                        <span>Video</span>
+                    </button>
+                    <button class="tab-btn" data-tab="audio-sources">
+                        <i class="fas fa-volume-up"></i>
+                        <span>Audio</span>
+                    </button>
+                    <button class="tab-btn" data-tab="graphics-sources">
+                        <i class="fas fa-images"></i>
+                        <span>Gráficos</span>
+                    </button>
+                    <button class="tab-btn" data-tab="media-sources">
+                        <i class="fas fa-film"></i>
+                        <span>Medios</span>
+                    </button>
+                </div>
+                
+                <!-- Contenido de pestañas -->
+                <div class="tab-content active" id="video-sources">
+                    <div class="sources-header">
+                        <h3>Fuentes de Video</h3>
+                        <button class="icon-btn" id="btn-refresh-video" title="Actualizar fuentes">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="sources-list" id="videoSourcesList">
+                        <!-- Fuentes dinámicas -->
+                        <div class="source-item">
+                            <div class="source-icon">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Cámara Principal</div>
+                                <div class="source-details">HD Webcam</div>
+                            </div>
+                            <div class="source-status"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="sources-footer">
+                        <button class="btn-add-source" id="btn-add-video">
+                            <i class="fas fa-plus"></i>
+                            <span>Agregar Fuente</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="audio-sources">
+                    <div class="sources-header">
+                        <h3>Fuentes de Audio</h3>
+                        <button class="icon-btn" id="btn-refresh-audio" title="Actualizar fuentes">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="sources-list" id="audioSourcesList">
+                        <!-- Fuentes de audio -->
+                    </div>
+                    
+                    <div class="sources-footer">
+                        <button class="btn-add-source" id="btn-add-audio">
+                            <i class="fas fa-plus"></i>
+                            <span>Agregar Fuente</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="graphics-sources">
+                    <div class="sources-header">
+                        <h3>Gráficos y Overlays</h3>
+                    </div>
+                    
+                    <div class="sources-list" id="graphicsSourcesList">
+                        <div class="source-item graphics-source" data-type="text">
+                            <div class="source-icon">
+                                <i class="fas fa-font"></i>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Texto</div>
+                                <div class="source-details">Overlay de texto</div>
+                            </div>
+                        </div>
+                        
+                        <div class="source-item graphics-source" data-type="image">
+                            <div class="source-icon">
+                                <i class="fas fa-image"></i>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Imagen</div>
+                                <div class="source-details">JPG, PNG, GIF</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="media-sources">
+                    <div class="sources-header">
+                        <h3>Archivos Multimedia</h3>
+                        <button class="icon-btn" id="btn-browse-media" title="Explorar archivos">
+                            <i class="fas fa-folder-open"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="sources-list" id="mediaSourcesList">
+                        <div class="source-item media-source" data-type="video">
+                            <div class="source-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Video Clip</div>
+                                <div class="source-details">MP4, MOV, AVI</div>
+                            </div>
+                        </div>
+                        
+                        <div class="source-item media-source" data-type="playlist">
+                            <div class="source-icon">
+                                <i class="fas fa-list"></i>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Lista de Reproducción</div>
+                                <div class="source-details">Videos secuenciales</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="media-browser">
+                        <input type="file" id="fileUpload" accept=".mp4,.mov,.avi,.jpg,.png,.gif,.webm,.mkv" multiple style="display: none;">
+                        <button class="btn-add-source" id="btn-upload-media">
+                            <i class="fas fa-upload"></i>
+                            <span>Subir Archivos</span>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- ÁREA CENTRAL - MULTIVISOR -->
+            <section class="main-area">
+                <!-- Herramientas del multivisor -->
+                <div class="multiviewer-toolbar">
+                    <div class="toolbar-left">
+                        <div class="layout-selector">
+                            <button class="layout-btn active" data-layout="2x2" title="2x2">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="layout-btn" data-layout="1+3" title="1+3">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                            <button class="layout-btn" data-layout="1+1" title="1+1">
+                                <i class="fas fa-columns"></i>
+                            </button>
+                            <button class="layout-btn" data-layout="full" title="Completo">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="multiviewer-controls">
+                            <button class="icon-btn" id="btn-snapshot" title="Capturar pantalla">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                            <button class="icon-btn" id="btn-zoom" title="Zoom">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <button class="icon-btn" id="btn-grid" title="Mostrar grid">
+                                <i class="fas fa-border-all"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="toolbar-right">
+                        <div class="resolution-display">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                            <span id="currentResolution">1920x1080</span>
+                        </div>
+                        
+                        <div class="fps-display">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span id="currentFps">50</span>
+                            <span>fps</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Multivisor -->
+                <div class="multiviewer-container">
+                    <div class="multiviewer-grid layout-2x2" id="multiviewer">
+                        <div class="viewport preview active">
+                            <div class="viewport-label">PREVIEW <i class="fas fa-eye"></i></div>
+                            <div class="viewport-content">
+                                Vista previa
+                            </div>
+                        </div>
+                        <div class="viewport program">
+                            <div class="viewport-label">PROGRAM <i class="fas fa-satellite"></i></div>
+                            <div class="viewport-content">
+                                Programa
+                            </div>
+                        </div>
+                        <div class="viewport">
+                            <div class="viewport-label">CAM 1</div>
+                            <div class="viewport-content">
+                                Cámara 1
+                            </div>
+                        </div>
+                        <div class="viewport">
+                            <div class="viewport-label">MEDIA</div>
+                            <div class="viewport-content">
+                                Media
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Controles de transición -->
+                <div class="transition-controls">
+                    <div class="transition-selector">
+                        <select id="transitionType">
+                            <option value="cut">Corte</option>
+                            <option value="fade" selected>Fundido</option>
+                            <option value="slide">Deslizar</option>
+                            <option value="swipe">Swipe</option>
+                            <option value="zoom">Zoom</option>
+                            <option value="stinger">Stinger</option>
+                        </select>
+                        
+                        <div class="transition-duration">
+                            <input type="range" id="transitionDuration" min="0" max="5000" value="1000">
+                            <span id="durationValue">1.0s</span>
+                        </div>
+                    </div>
+                    
+                    <div class="transition-buttons">
+                        <button class="transition-btn cut-btn" id="btn-cut">
+                            <i class="fas fa-bolt"></i>
+                            <span>CUT</span>
+                        </button>
+                        
+                        <button class="transition-btn auto-btn" id="btn-auto">
+                            <i class="fas fa-play"></i>
+                            <span>AUTO</span>
+                        </button>
+                        
+                        <button class="transition-btn fade-btn" id="btn-fade">
+                            <i class="fas fa-adjust"></i>
+                            <span>FADE</span>
+                        </button>
+                        
+                        <button class="transition-btn stinger-btn" id="btn-stinger">
+                            <i class="fas fa-star"></i>
+                            <span>STINGER</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SIDEBAR DERECHA - ESCENAS Y CONTROLES -->
+            <aside class="sidebar-right">
+                <!-- Pestañas de controles -->
+                <div class="sidebar-tabs">
+                    <button class="tab-btn active" data-tab="scenes-control">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Escenas</span>
+                    </button>
+                    <button class="tab-btn" data-tab="audio-control">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Audio</span>
+                    </button>
+                    <button class="tab-btn" data-tab="stream-control">
+                        <i class="fas fa-broadcast-tower"></i>
+                        <span>Stream</span>
+                    </button>
+                    <button class="tab-btn" data-tab="recording-control">
+                        <i class="fas fa-record-vinyl"></i>
+                        <span>Grabación</span>
+                    </button>
+                </div>
+                
+                <!-- Contenido de pestañas -->
+                <div class="tab-content active" id="scenes-control">
+                    <div class="scenes-header">
+                        <h3>Escenas</h3>
+                        <div class="scene-actions">
+                            <button class="icon-btn" id="btn-add-scene">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="icon-btn" id="btn-duplicate-scene">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <button class="icon-btn" id="btn-scene-transition">
+                                <i class="fas fa-exchange-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="scenes-list" id="scenesList">
+                        <div class="scene-item active">
+                            <div class="scene-item-name">Escena Principal</div>
+                            <div class="scene-item-info">
+                                <span class="scene-item-sources">
+                                    <i class="fas fa-video"></i> 3 fuentes
+                                </span>
+                                <span>HD 1080p</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scene-sources">
+                        <h4>Fuentes en Escena</h4>
+                        <div class="sources-tree" id="sceneSourcesTree">
+                            <div class="tree-item">
+                                <i class="fas fa-camera"></i>
+                                <span>Cámara Principal</span>
+                            </div>
+                            <div class="tree-item">
+                                <i class="fas fa-image"></i>
+                                <span>Logo Canal</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="audio-control">
+                    <div class="sources-header">
+                        <h3>Mezclador de Audio</h3>
+                    </div>
+                    
+                    <div class="sources-list" id="audioChannels">
+                        <!-- Canales de audio -->
+                    </div>
+                    
+                    <div class="sources-footer">
+                        <div class="master-controls">
+                            <label>Volumen Master:</label>
+                            <input type="range" id="masterVolume" min="0" max="100" value="80">
+                            <span class="volume-value">80%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="stream-control">
+                    <div class="sources-header">
+                        <h3>Configuración de Stream</h3>
+                    </div>
+                    
+                    <div class="sources-list">
+                        <div class="source-item">
+                            <div class="source-icon">
+                                <i class="fas fa-server"></i>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Servidor RTMP</div>
+                                <div class="source-details">rtmp://live.example.com</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="recording-control">
+                    <div class="sources-header">
+                        <h3>Configuración de Grabación</h3>
+                    </div>
+                    
+                    <div class="sources-list">
+                        <div class="source-item">
+                            <div class="source-icon">
+                                <i class="fas fa-hdd"></i>
+                            </div>
+                            <div class="source-info">
+                                <div class="source-name">Carpeta de Grabación</div>
+                                <div class="source-details">/grabaciones/</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- FOOTER -->
+            <footer class="app-footer">
+                <div class="footer-left">
+                    <div class="stream-controls">
+                        <button class="stream-btn" id="btn-start-stream">
+                            <i class="fas fa-play-circle"></i>
+                            <span>INICIAR STREAM</span>
+                        </button>
+                        
+                        <button class="stream-btn stop-btn" id="btn-stop-stream" disabled>
+                            <i class="fas fa-stop-circle"></i>
+                            <span>DETENER STREAM</span>
+                        </button>
+                        
+                        <button class="stream-btn record-btn" id="btn-start-recording">
+                            <i class="fas fa-circle"></i>
+                            <span>GRABAR</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="footer-center">
+                    <div class="broadcast-info">
+                        <div class="info-item">
+                            <span class="info-label">Bitrate:</span>
+                            <span class="info-value" id="streamBitrate">0 Mbps</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">FPS:</span>
+                            <span class="info-value" id="streamFps">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Dropped:</span>
+                            <span class="info-value" id="streamDropped">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">CPU:</span>
+                            <span class="info-value" id="streamCpu">0%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-right">
+                    <div class="master-controls">
+                        <button class="master-btn emergency-btn" id="btn-emergency">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>EMERGENCIA</span>
+                        </button>
+                        
+                        <button class="master-btn" id="btn-blackout">
+                            <i class="fas fa-moon"></i>
+                            <span>BLACKOUT</span>
+                        </button>
+                        
+                        <button class="master-btn" id="btn-freeze">
+                            <i class="fas fa-snowflake"></i>
+                            <span>FREEZE</span>
+                        </button>
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- MODALES -->
+    <div id="modalAddSource" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Agregar Fuente</h2>
+                <button class="modal-close" id="closeAddSource">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="source-types">
+                    <div class="source-type" data-type="camera">
+                        <i class="fas fa-camera"></i>
+                        <h3>Cámara Web</h3>
+                        <p>Dispositivo de cámara</p>
+                    </div>
+                    
+                    <div class="source-type" data-type="microphone">
+                        <i class="fas fa-microphone"></i>
+                        <h3>Micrófono</h3>
+                        <p>Dispositivo de audio</p>
+                    </div>
+                    
+                    <div class="source-type" data-type="image">
+                        <i class="fas fa-image"></i>
+                        <h3>Imagen</h3>
+                        <p>JPG, PNG, GIF</p>
+                    </div>
+                    
+                    <div class="source-type" data-type="video-file">
+                        <i class="fas fa-video"></i>
+                        <h3>Archivo de Video</h3>
+                        <p>MP4, MOV, AVI</p>
+                    </div>
+                    
+                    <div class="source-type" data-type="browser">
+                        <i class="fas fa-globe"></i>
+                        <h3>Navegador</h3>
+                        <p>Página web</p>
+                    </div>
+                    
+                    <div class="source-type" data-type="text">
+                        <i class="fas fa-font"></i>
+                        <h3>Texto</h3>
+                        <p>Texto, títulos, subtítulos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
-    <!-- Script para cargar dinámicamente -->
+    <div id="modalSettings" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Configuración del Sistema</h2>
+                <button class="modal-close" id="closeSettings">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Configuración del sistema en desarrollo...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificaciones -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Script principal -->
     <script>
-        // Script que carga la interfaz completa
-        document.addEventListener('DOMContentLoaded', function() {
-            // Actualizar texto de carga
-            document.getElementById('loadingText').textContent = 'Cargando interfaz...';
-            document.getElementById('loadingProgress').style.width = '30%';
-            
-            // Cargar la interfaz de controles dinámicamente
-            setTimeout(() => {
-                loadInterface();
-            }, 1000);
-        });
-        
-        function loadInterface() {
-            document.getElementById('loadingText').textContent = 'Montando componentes...';
-            document.getElementById('loadingProgress').style.width = '60%';
-            
-            // Aquí va TODO el HTML de controles.html
-            const interfaceHTML = `
-                <!-- CONTENIDO COMPLETO DE controles.html -->
-                <div class="app-container">
-                    <!-- HEADER -->
-                    <header class="app-header">
-                        <div class="header-left">
-                            <div class="logo">
-                                <i class="fas fa-tower-broadcast logo-icon"></i>
-                                <span class="logo-text">TeleMaster Pro</span>
-                                <span class="logo-version">v1.0.0</span>
-                            </div>
-                            
-                            <div class="header-controls">
-                                <button class="header-btn" id="btn-settings" title="Configuración">
-                                    <i class="fas fa-cog"></i>
-                                    <span>Configuración</span>
-                                </button>
-                                <button class="header-btn" id="btn-outputs" title="Salidas">
-                                    <i class="fas fa-plug"></i>
-                                    <span>Salidas</span>
-                                </button>
-                                <button class="header-btn" id="btn-broadcast" title="Transmisión">
-                                    <i class="fas fa-satellite-dish"></i>
-                                    <span>Transmisión</span>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="header-center">
-                            <div class="time-display">
-                                <i class="fas fa-clock"></i>
-                                <span id="currentTime">--:--:--</span>
-                            </div>
-                            
-                            <div class="program-display">
-                                <span class="program-label">PROGRAM:</span>
-                                <span id="currentProgram" class="program-name">Sin señal</span>
-                            </div>
-                        </div>
-                        
-                        <div class="header-right">
-                            <div class="status-indicators">
-                                <div class="status-item">
-                                    <div class="status-dot" id="status-stream"></div>
-                                    <span>STREAM</span>
-                                </div>
-                                <div class="status-item">
-                                    <div class="status-dot" id="status-record"></div>
-                                    <span>REC</span>
-                                </div>
-                                <div class="status-item">
-                                    <div class="status-dot" id="status-server"></div>
-                                    <span>SERVIDOR</span>
-                                </div>
-                            </div>
-                            
-                            <div class="system-stats">
-                                <div class="stat-item">
-                                    <i class="fas fa-microchip"></i>
-                                    <span id="cpuUsage">0%</span>
-                                </div>
-                                <div class="stat-item">
-                                    <i class="fas fa-memory"></i>
-                                    <span id="memoryUsage">0%</span>
-                                </div>
-                                <div class="stat-item">
-                                    <i class="fas fa-network-wired"></i>
-                                    <span id="networkUsage">0kb/s</span>
-                                </div>
-                            </div>
-                        </div>
-                    </header>
-
-                    <!-- ÁREA PRINCIPAL -->
-                    <main class="main-content">
-                        <!-- SIDEBAR IZQUIERDA - FUENTES -->
-                        <aside class="sidebar-left">
-                            <!-- Pestañas de fuentes -->
-                            <div class="sidebar-tabs">
-                                <button class="tab-btn active" data-tab="video-sources">
-                                    <i class="fas fa-video"></i>
-                                    <span>Video</span>
-                                </button>
-                                <button class="tab-btn" data-tab="audio-sources">
-                                    <i class="fas fa-volume-up"></i>
-                                    <span>Audio</span>
-                                </button>
-                                <button class="tab-btn" data-tab="graphics-sources">
-                                    <i class="fas fa-images"></i>
-                                    <span>Gráficos</span>
-                                </button>
-                                <button class="tab-btn" data-tab="media-sources">
-                                    <i class="fas fa-film"></i>
-                                    <span>Medios</span>
-                                </button>
-                            </div>
-                            
-                            <!-- Contenido de pestañas -->
-                            <div class="tab-content active" id="video-sources">
-                                <div class="sources-header">
-                                    <h3>Fuentes de Video</h3>
-                                    <button class="icon-btn" id="btn-refresh-video" title="Actualizar fuentes">
-                                        <i class="fas fa-sync-alt"></i>
-                                    </button>
-                                </div>
-                                
-                                <div class="sources-list" id="videoSourcesList">
-                                    <!-- Fuentes dinámicas se llenarán con JavaScript -->
-                                </div>
-                                
-                                <div class="sources-footer">
-                                    <button class="btn-add-source" id="btn-add-video">
-                                        <i class="fas fa-plus"></i>
-                                        <span>Agregar Fuente</span>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <!-- Más pestañas... -->
-                        </aside>
-
-                        <!-- ÁREA CENTRAL - MULTIVISOR -->
-                        <section class="main-area">
-                            <!-- Barra de herramientas del multivisor -->
-                            <div class="multiviewer-toolbar">
-                                <div class="toolbar-left">
-                                    <div class="layout-selector">
-                                        <button class="layout-btn active" data-layout="2x2" title="2x2">
-                                            <i class="fas fa-th"></i>
-                                        </button>
-                                        <button class="layout-btn" data-layout="1+3" title="1+3">
-                                            <i class="fas fa-th-large"></i>
-                                        </button>
-                                        <button class="layout-btn" data-layout="1+1" title="1+1">
-                                            <i class="fas fa-columns"></i>
-                                        </button>
-                                        <button class="layout-btn" data-layout="full" title="Completo">
-                                            <i class="fas fa-expand"></i>
-                                        </button>
-                                    </div>
-                                    
-                                    <div class="multiviewer-controls">
-                                        <button class="icon-btn" id="btn-snapshot" title="Capturar pantalla">
-                                            <i class="fas fa-camera"></i>
-                                        </button>
-                                        <button class="icon-btn" id="btn-zoom" title="Zoom">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                        <button class="icon-btn" id="btn-grid" title="Mostrar grid">
-                                            <i class="fas fa-border-all"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <div class="toolbar-right">
-                                    <div class="resolution-display">
-                                        <i class="fas fa-expand-arrows-alt"></i>
-                                        <span id="currentResolution">1920x1080</span>
-                                    </div>
-                                    
-                                    <div class="fps-display">
-                                        <i class="fas fa-tachometer-alt"></i>
-                                        <span id="currentFps">50</span>
-                                        <span>fps</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Multivisor -->
-                            <div class="multiviewer-container" id="multiviewer">
-                                <!-- Cajas del multivisor... -->
-                            </div>
-                            
-                            <!-- Controles de transición -->
-                            <div class="transition-controls">
-                                <!-- Controles de transición... -->
-                            </div>
-                        </section>
-
-                        <!-- SIDEBAR DERECHA - ESCENAS Y CONTROLES -->
-                        <aside class="sidebar-right">
-                            <!-- Pestañas de controles -->
-                            <div class="sidebar-tabs">
-                                <button class="tab-btn active" data-tab="scenes-control">
-                                    <i class="fas fa-layer-group"></i>
-                                    <span>Escenas</span>
-                                </button>
-                                <button class="tab-btn" data-tab="audio-control">
-                                    <i class="fas fa-sliders-h"></i>
-                                    <span>Audio</span>
-                                </button>
-                                <button class="tab-btn" data-tab="stream-control">
-                                    <i class="fas fa-broadcast-tower"></i>
-                                    <span>Stream</span>
-                                </button>
-                                <button class="tab-btn" data-tab="recording-control">
-                                    <i class="fas fa-record-vinyl"></i>
-                                    <span>Grabación</span>
-                                </button>
-                            </div>
-                            
-                            <!-- Contenido de pestañas... -->
-                        </aside>
-
-                        <!-- FOOTER - TRANSPORTE Y CONTROLES MAESTROS -->
-                        <footer class="app-footer">
-                            <!-- Controles del footer... -->
-                        </footer>
-                    </main>
-                </div>
+        // ===== SISTEMA TELEMASTER PRO =====
+        class TeleMasterSystem {
+            constructor() {
+                this.currentScene = null;
+                this.scenes = [];
+                this.sources = [];
+                this.selectedSource = null;
+                this.activeModal = null;
+                this.streamActive = false;
+                this.recordingActive = false;
+                this.videoDevices = [];
+                this.audioDevices = [];
+                this.mediaFiles = [];
+                this.currentLayout = '2x2';
+                this.isMobile = false;
+                this.isTablet = false;
+                this.isDesktop = true;
                 
-                <!-- MODALES -->
-                <div id="modalSettings" class="modal">
-                    <!-- Contenido modal... -->
-                </div>
-                
-                <!-- Notificaciones -->
-                <div id="notificationContainer" class="notification-container"></div>
-            `;
+                // Detectar dispositivo
+                this.detectDevice();
+            }
             
-            // Insertar la interfaz en el contenedor
-            document.getElementById('appContainer').innerHTML = interfaceHTML;
-            
-            // Actualizar progreso
-            document.getElementById('loadingText').textContent = 'Inicializando controles...';
-            document.getElementById('loadingProgress').style.width = '90%';
-            
-            // Inicializar controles después de cargar el HTML
-            setTimeout(() => {
-                // Inicializar sistema
-                if (typeof window.teleMaster !== 'undefined') {
-                    window.teleMaster.init();
-                }
-                
-                // Inicializar controles
-                initializeApplication();
-                
-                // Ocultar pantalla de carga
-                document.getElementById('loadingText').textContent = '¡Listo!';
-                document.getElementById('loadingProgress').style.width = '100%';
-                
-                setTimeout(() => {
-                    document.getElementById('loadingScreen').style.opacity = '0';
-                    setTimeout(() => {
-                        document.getElementById('loadingScreen').style.display = 'none';
-                    }, 500);
-                }, 500);
-                
-            }, 500);
-        }
-        
-        function initializeApplication() {
-            console.log('🚀 Inicializando aplicación...');
-            
-            // Inicializar componentes del sistema
-            initializeSystem();
-            
-            // Inicializar controles de interfaz
-            initializeInterfaceControls();
-            
-            // Conectar con servidor
-            connectToServer();
-            
-            console.log('✅ Aplicación inicializada');
-        }
-        
-        function initializeSystem() {
-            // Aquí iría la inicialización del sistema TeleMaster
-            console.log('⚙️ Inicializando sistema...');
-            
-            // Actualizar hora
-            startClock();
-            
-            // Actualizar estadísticas
-            updateSystemStats();
-        }
-        
-        function initializeInterfaceControls() {
-            // Inicializar todos los controles de la interfaz
-            console.log('🎮 Inicializando controles...');
-            
-            // Inicializar pestañas
-            initializeTabs();
-            
-            // Inicializar botones
-            initializeButtons();
-            
-            // Inicializar eventos
-            setupEventListeners();
-        }
-        
-        function connectToServer() {
-            console.log('🔗 Conectando con servidor...');
-            // Aquí iría la conexión WebSocket/API
-        }
-        
-        // Funciones auxiliares
-        function initializeTabs() {
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const tabId = this.getAttribute('data-tab');
-                    
-                    // Remover clase active de todos
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    
-                    // Agregar clase active
-                    this.classList.add('active');
-                    const tabContent = document.getElementById(tabId);
-                    if (tabContent) {
-                        tabContent.classList.add('active');
-                    }
-                });
-            });
-        }
-        
-        function initializeButtons() {
-            // Configurar botones principales
-            const buttons = [
-                'btn-settings', 'btn-outputs', 'btn-broadcast',
-                'btn-refresh-video', 'btn-add-video',
-                'btn-snapshot', 'btn-zoom', 'btn-grid'
-            ];
-            
-            buttons.forEach(btnId => {
-                const btn = document.getElementById(btnId);
-                if (btn) {
-                    btn.addEventListener('click', () => {
-                        console.log(`🔘 Botón clickeado: ${btnId}`);
-                        // Aquí irían las acciones específicas
-                    });
-                }
-            });
-        }
-        
-        function setupEventListeners() {
-            // Atajos de teclado
-            document.addEventListener('keydown', (e) => {
-                // Ejemplo: Espacio para corte
-                if (e.code === 'Space' && !e.target.matches('input, textarea')) {
-                    e.preventDefault();
-                    console.log('✂️ Corte por teclado');
-                }
-            });
-        }
-        
-        function startClock() {
-            function updateClock() {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('es-ES', { 
-                    hour12: false,
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                });
-                
-                const timeDisplay = document.getElementById('currentTime');
-                if (timeDisplay) {
-                    timeDisplay.textContent = timeString;
+            detectDevice() {
+                const width = window.innerWidth;
+                if (width < 768) {
+                    this.isMobile = true;
+                    this.isTablet = false;
+                    this.isDesktop = false;
+                } else if (width < 992) {
+                    this.isMobile = false;
+                    this.isTablet = true;
+                    this.isDesktop = false;
+                } else {
+                    this.isMobile = false;
+                    this.isTablet = false;
+                    this.isDesktop = true;
                 }
             }
             
-            updateClock();
-            setInterval(updateClock, 1000);
+            // Inicializar sistema
+            async initialize() {
+                console.log('🚀 Inicializando TeleMaster Pro...');
+                
+                // Crear escena inicial
+                const initialScene = this.createScene('Escena Principal');
+                this.currentScene = initialScene;
+                this.updateScenesList();
+                
+                // Cargar dispositivos multimedia
+                await this.loadMediaDevices();
+                
+                // Iniciar reloj
+                this.startClock();
+                
+                // Iniciar estadísticas
+                this.startSystemStats();
+                
+                // Configurar eventos
+                this.setupEventListeners();
+                
+                // Configurar responsive
+                this.setupResponsive();
+                
+                console.log('✅ Sistema inicializado');
+                this.showNotification('Sistema TeleMaster Pro inicializado', 'success');
+            }
+            
+            // Cargar dispositivos multimedia
+            async loadMediaDevices() {
+                try {
+                    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+                        const devices = await navigator.mediaDevices.enumerateDevices();
+                        this.videoDevices = devices.filter(d => d.kind === 'videoinput');
+                        this.audioDevices = devices.filter(d => d.kind === 'audioinput');
+                        
+                        console.log(`📷 ${this.videoDevices.length} dispositivos de video encontrados`);
+                        console.log(`🎤 ${this.audioDevices.length} dispositivos de audio encontrados`);
+                        
+                        this.updateVideoSourcesList();
+                        this.updateAudioSourcesList();
+                    }
+                } catch (error) {
+                    console.error('Error al cargar dispositivos:', error);
+                    this.showNotification('Error al acceder a dispositivos multimedia', 'error');
+                }
+            }
+            
+            // Crear escena
+            createScene(name) {
+                const scene = {
+                    id: `scene_${Date.now()}`,
+                    name: name || `Escena ${this.scenes.length + 1}`,
+                    sources: [],
+                    active: false,
+                    preview: null
+                };
+                
+                this.scenes.push(scene);
+                return scene;
+            }
+            
+            // Actualizar lista de escenas
+            updateScenesList() {
+                const list = document.getElementById('scenesList');
+                if (!list) return;
+                
+                list.innerHTML = '';
+                
+                this.scenes.forEach(scene => {
+                    const item = document.createElement('div');
+                    item.className = `scene-item ${scene === this.currentScene ? 'active' : ''}`;
+                    item.innerHTML = `
+                        <div class="scene-item-name">${scene.name}</div>
+                        <div class="scene-item-info">
+                            <span class="scene-item-sources">
+                                <i class="fas fa-video"></i> ${scene.sources.length} fuentes
+                            </span>
+                            <span>HD 1080p</span>
+                        </div>
+                    `;
+                    
+                    item.addEventListener('click', () => {
+                        this.switchToScene(scene);
+                    });
+                    
+                    list.appendChild(item);
+                });
+            }
+            
+            // Cambiar a escena
+            switchToScene(scene) {
+                this.scenes.forEach(s => s.active = false);
+                scene.active = true;
+                this.currentScene = scene;
+                
+                document.getElementById('currentProgram').textContent = scene.name;
+                this.updateScenesList();
+                
+                this.showNotification(`Cambiado a escena: ${scene.name}`);
+            }
+            
+            // Actualizar lista de fuentes de video
+            updateVideoSourcesList() {
+                const list = document.getElementById('videoSourcesList');
+                if (!list) return;
+                
+                list.innerHTML = '';
+                
+                // Agregar cámaras disponibles
+                this.videoDevices.forEach(device => {
+                    const item = document.createElement('div');
+                    item.className = 'source-item';
+                    item.dataset.deviceId = device.deviceId;
+                    item.innerHTML = `
+                        <div class="source-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <div class="source-info">
+                            <div class="source-name">${device.label || 'Cámara ' + (this.videoDevices.indexOf(device) + 1)}</div>
+                            <div class="source-details">Dispositivo de video</div>
+                        </div>
+                        <div class="source-status"></div>
+                    `;
+                    
+                    item.addEventListener('click', () => {
+                        this.addCameraSource(device);
+                    });
+                    
+                    list.appendChild(item);
+                });
+            }
+            
+            // Actualizar lista de fuentes de audio
+            updateAudioSourcesList() {
+                const list = document.getElementById('audioSourcesList');
+                if (!list) return;
+                
+                list.innerHTML = '';
+                
+                this.audioDevices.forEach(device => {
+                    const item = document.createElement('div');
+                    item.className = 'source-item';
+                    item.innerHTML = `
+                        <div class="source-icon">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <div class="source-info">
+                            <div class="source-name">${device.label || 'Micrófono ' + (this.audioDevices.indexOf(device) + 1)}</div>
+                            <div class="source-details">Dispositivo de audio</div>
+                        </div>
+                    `;
+                    
+                    list.appendChild(item);
+                });
+            }
+            
+            // Agregar fuente de cámara
+            async addCameraSource(device) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: { deviceId: device.deviceId },
+                        audio: false
+                    });
+                    
+                    const source = {
+                        id: `source_${Date.now()}`,
+                        name: device.label || 'Cámara',
+                        type: 'camera',
+                        deviceId: device.deviceId,
+                        stream: stream,
+                        active: true
+                    };
+                    
+                    this.currentScene.sources.push(source);
+                    this.sources.push(source);
+                    
+                    this.updateSceneSourcesTree();
+                    this.showNotification(`Cámara "${source.name}" agregada`, 'success');
+                    
+                    // Cerrar modal si está abierto
+                    this.closeModal();
+                    
+                } catch (error) {
+                    console.error('Error al acceder a la cámara:', error);
+                    this.showNotification('Error al acceder a la cámara', 'error');
+                }
+            }
+            
+            // Actualizar árbol de fuentes de escena
+            updateSceneSourcesTree() {
+                const tree = document.getElementById('sceneSourcesTree');
+                if (!tree || !this.currentScene) return;
+                
+                tree.innerHTML = '';
+                
+                this.currentScene.sources.forEach(source => {
+                    const item = document.createElement('div');
+                    item.className = 'tree-item';
+                    item.innerHTML = `
+                        <i class="fas fa-${this.getSourceIcon(source.type)}"></i>
+                        <span>${source.name}</span>
+                    `;
+                    
+                    tree.appendChild(item);
+                });
+            }
+            
+            getSourceIcon(type) {
+                const icons = {
+                    'camera': 'video',
+                    'video-file': 'video',
+                    'image': 'image',
+                    'text': 'font',
+                    'microphone': 'microphone',
+                    'browser': 'globe'
+                };
+                return icons[type] || 'file';
+            }
+            
+            // Cambiar layout del multivisor
+            changeLayout(layout) {
+                this.currentLayout = layout;
+                const grid = document.getElementById('multiviewer');
+                if (!grid) return;
+                
+                grid.className = `multiviewer-grid layout-${layout}`;
+                
+                // Actualizar botones activos
+                document.querySelectorAll('.layout-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`.layout-btn[data-layout="${layout}"]`)?.classList.add('active');
+                
+                this.showNotification(`Layout cambiado a ${layout}`);
+            }
+            
+            // Iniciar reloj
+            startClock() {
+                const update = () => {
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString('es-ES', { 
+                        hour12: false,
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+                    
+                    const timeDisplay = document.getElementById('currentTime');
+                    if (timeDisplay) {
+                        timeDisplay.textContent = timeString;
+                    }
+                };
+                
+                update();
+                setInterval(update, 1000);
+            }
+            
+            // Iniciar estadísticas del sistema
+            startSystemStats() {
+                setInterval(() => {
+                    // Simular estadísticas
+                    const cpu = 10 + Math.random() * 30;
+                    const mem = 30 + Math.random() * 40;
+                    const net = this.streamActive ? (1000 + Math.random() * 4000) : (100 + Math.random() * 400);
+                    
+                    // Actualizar displays
+                    const cpuDisplay = document.getElementById('cpuUsage');
+                    const memDisplay = document.getElementById('memoryUsage');
+                    const netDisplay = document.getElementById('networkUsage');
+                    
+                    if (cpuDisplay) cpuDisplay.textContent = Math.round(cpu) + '%';
+                    if (memDisplay) memDisplay.textContent = Math.round(mem) + '%';
+                    if (netDisplay) netDisplay.textContent = Math.round(net) + 'kb/s';
+                    
+                    // Actualizar estadísticas de stream
+                    if (this.streamActive) {
+                        const bitrateDisplay = document.getElementById('streamBitrate');
+                        const fpsDisplay = document.getElementById('streamFps');
+                        const cpuStreamDisplay = document.getElementById('streamCpu');
+                        
+                        if (bitrateDisplay) bitrateDisplay.textContent = (2 + Math.random() * 3).toFixed(1) + ' Mbps';
+                        if (fpsDisplay) fpsDisplay.textContent = Math.round(25 + Math.random() * 10);
+                        if (cpuStreamDisplay) cpuStreamDisplay.textContent = Math.round(cpu) + '%';
+                    }
+                }, 3000);
+            }
+            
+            // Mostrar notificación
+            showNotification(message, type = 'info') {
+                const container = document.getElementById('notificationContainer');
+                if (!container) return;
+                
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `
+                    <div class="notification-header">
+                        <div class="notification-title">TeleMaster Pro</div>
+                        <button class="notification-close">&times;</button>
+                    </div>
+                    <div class="notification-message">${message}</div>
+                `;
+                
+                container.appendChild(notification);
+                
+                // Botón para cerrar
+                notification.querySelector('.notification-close').addEventListener('click', () => {
+                    notification.remove();
+                });
+                
+                // Auto-remover después de 5 segundos
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 5000);
+            }
+            
+            // Abrir modal
+            openModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'flex';
+                    this.activeModal = modalId;
+                }
+            }
+            
+            // Cerrar modal
+            closeModal() {
+                if (this.activeModal) {
+                    const modal = document.getElementById(this.activeModal);
+                    if (modal) {
+                        modal.style.display = 'none';
+                    }
+                    this.activeModal = null;
+                }
+            }
+            
+            // Configurar eventos
+            setupEventListeners() {
+                // Tabs
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const tabId = btn.dataset.tab;
+                        
+                        // Remover active de todos
+                        btn.closest('.sidebar-tabs').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                        btn.closest('.sidebar-left, .sidebar-right').querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                        
+                        // Activar tab seleccionado
+                        btn.classList.add('active');
+                        const tabContent = document.getElementById(tabId);
+                        if (tabContent) {
+                            tabContent.classList.add('active');
+                        }
+                    });
+                });
+                
+                // Botón agregar fuente
+                document.getElementById('btn-add-video')?.addEventListener('click', () => {
+                    this.openModal('modalAddSource');
+                });
+                
+                // Tipos de fuente en modal
+                document.querySelectorAll('.source-type').forEach(type => {
+                    type.addEventListener('click', () => {
+                        const sourceType = type.dataset.type;
+                        
+                        switch(sourceType) {
+                            case 'camera':
+                                if (this.videoDevices.length > 0) {
+                                    this.addCameraSource(this.videoDevices[0]);
+                                } else {
+                                    this.showNotification('No se encontraron cámaras disponibles', 'error');
+                                }
+                                break;
+                            case 'image':
+                            case 'video-file':
+                                document.getElementById('fileUpload').click();
+                                break;
+                            case 'text':
+                                this.showNotification('Funcionalidad de texto en desarrollo');
+                                break;
+                            default:
+                                this.showNotification(`Fuente ${sourceType} en desarrollo`);
+                        }
+                    });
+                });
+                
+                // Cerrar modales
+                document.getElementById('closeAddSource')?.addEventListener('click', () => this.closeModal());
+                document.getElementById('closeSettings')?.addEventListener('click', () => this.closeModal());
+                
+                // Cerrar modal al hacer clic fuera
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            this.closeModal();
+                        }
+                    });
+                });
+                
+                // Layouts del multivisor
+                document.querySelectorAll('.layout-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const layout = btn.dataset.layout;
+                        this.changeLayout(layout);
+                    });
+                });
+                
+                // Controles de transición
+                document.getElementById('btn-cut')?.addEventListener('click', () => {
+                    this.showNotification('Transición: Corte realizado', 'success');
+                });
+                
+                document.getElementById('btn-fade')?.addEventListener('click', () => {
+                    this.showNotification('Transición: Fundido realizado', 'success');
+                });
+                
+                // Stream
+                document.getElementById('btn-start-stream')?.addEventListener('click', () => {
+                    this.streamActive = true;
+                    document.getElementById('btn-start-stream').disabled = true;
+                    document.getElementById('btn-stop-stream').disabled = false;
+                    document.getElementById('status-stream').classList.add('active');
+                    this.showNotification('Transmisión iniciada', 'success');
+                });
+                
+                document.getElementById('btn-stop-stream')?.addEventListener('click', () => {
+                    this.streamActive = false;
+                    document.getElementById('btn-start-stream').disabled = false;
+                    document.getElementById('btn-stop-stream').disabled = true;
+                    document.getElementById('status-stream').classList.remove('active');
+                    this.showNotification('Transmisión detenida', 'warning');
+                });
+                
+                // Grabación
+                document.getElementById('btn-start-recording')?.addEventListener('click', () => {
+                    this.recordingActive = !this.recordingActive;
+                    const btn = document.getElementById('btn-start-recording');
+                    
+                    if (this.recordingActive) {
+                        btn.innerHTML = '<i class="fas fa-stop"></i><span>DETENER GRAB.</span>';
+                        btn.classList.add('stop-btn');
+                        document.getElementById('status-record').classList.add('active');
+                        this.showNotification('Grabación iniciada', 'success');
+                    } else {
+                        btn.innerHTML = '<i class="fas fa-circle"></i><span>GRABAR</span>';
+                        btn.classList.remove('stop-btn');
+                        document.getElementById('status-record').classList.remove('active');
+                        this.showNotification('Grabación detenida', 'warning');
+                    }
+                });
+                
+                // Controles maestros
+                document.getElementById('btn-emergency')?.addEventListener('click', () => {
+                    if (confirm('¿Activar modo emergencia? Esto detendrá la transmisión.')) {
+                        this.streamActive = false;
+                        document.getElementById('btn-start-stream').disabled = false;
+                        document.getElementById('btn-stop-stream').disabled = true;
+                        document.getElementById('status-stream').classList.remove('active');
+                        this.showNotification('Modo emergencia activado', 'warning');
+                    }
+                });
+                
+                // Subida de archivos
+                document.getElementById('fileUpload')?.addEventListener('change', (e) => {
+                    const files = Array.from(e.target.files);
+                    files.forEach(file => {
+                        this.showNotification(`Archivo "${file.name}" cargado`);
+                    });
+                    e.target.value = '';
+                });
+                
+                // Atajos de teclado
+                document.addEventListener('keydown', (e) => {
+                    // Espacio para corte
+                    if (e.code === 'Space' && !e.target.matches('input, textarea, button')) {
+                        e.preventDefault();
+                        this.showNotification('Corte por teclado', 'success');
+                    }
+                    
+                    // Escape para cerrar modal
+                    if (e.code === 'Escape' && this.activeModal) {
+                        this.closeModal();
+                    }
+                });
+            }
+            
+            // Configurar responsive
+            setupResponsive() {
+                // Detectar cambios de tamaño
+                window.addEventListener('resize', () => {
+                    this.detectDevice();
+                    
+                    // Ajustar layout en móviles
+                    if (this.isMobile) {
+                        this.changeLayout('full');
+                    }
+                });
+                
+                // Ajustar inicialmente
+                if (this.isMobile) {
+                    this.changeLayout('full');
+                }
+            }
         }
         
-        function updateSystemStats() {
-            setInterval(() => {
-                const cpu = 15 + Math.random() * 20;
-                const mem = 40 + Math.random() * 20;
-                const net = 500 + Math.random() * 1500;
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Simular carga progresiva
+            const loadingText = document.getElementById('loadingText');
+            const loadingProgress = document.getElementById('loadingProgress');
+            
+            const steps = [
+                'Inicializando sistema...',
+                'Cargando componentes...',
+                'Configurando video...',
+                'Cargando dispositivos...',
+                'Preparando interfaz...'
+            ];
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 20;
+                loadingProgress.style.width = `${progress}%`;
                 
-                const cpuDisplay = document.getElementById('cpuUsage');
-                const memDisplay = document.getElementById('memoryUsage');
-                const netDisplay = document.getElementById('networkUsage');
+                if (progress <= 100) {
+                    const stepIndex = Math.floor(progress / 20);
+                    if (stepIndex < steps.length) {
+                        loadingText.textContent = steps[stepIndex];
+                    }
+                }
                 
-                if (cpuDisplay) cpuDisplay.textContent = Math.round(cpu) + '%';
-                if (memDisplay) memDisplay.textContent = Math.round(mem) + '%';
-                if (netDisplay) netDisplay.textContent = Math.round(net) + 'kb/s';
-            }, 3000);
-        }
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // Ocultar pantalla de carga
+                    setTimeout(() => {
+                        loadingText.textContent = '¡Listo!';
+                        
+                        setTimeout(() => {
+                            document.getElementById('loadingScreen').style.opacity = '0';
+                            
+                            setTimeout(() => {
+                                document.getElementById('loadingScreen').style.display = 'none';
+                                document.getElementById('app').style.display = 'flex';
+                                
+                                // Inicializar sistema
+                                window.teleMaster = new TeleMasterSystem();
+                                window.teleMaster.initialize();
+                            }, 300);
+                        }, 500);
+                    }, 300);
+                }
+            }, 300);
+        });
     </script>
 </body>
 </html>
